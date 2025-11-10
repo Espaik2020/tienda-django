@@ -1,0 +1,441 @@
+[
+{
+  "model": "catalogo.marca",
+  "pk": 1,
+  "fields": {
+    "nombre": "Nintendo",
+    "slug": "nintendo",
+    "logo": "marcas/nintendo.png",
+    "descripcion": "",
+    "sitio_url": null
+  }
+},
+{
+  "model": "catalogo.marca",
+  "pk": 2,
+  "fields": {
+    "nombre": "Xbox",
+    "slug": "xbox",
+    "logo": "marcas/xbox_OcGZpL5.png",
+    "descripcion": "<p>compa&ntilde;ia x box, extencion de microsft compa&ntilde;i</p>",
+    "sitio_url": null
+  }
+},
+{
+  "model": "catalogo.marca",
+  "pk": 3,
+  "fields": {
+    "nombre": "Play Station",
+    "slug": "play-station",
+    "logo": "marcas/playstation.png",
+    "descripcion": "<p>play station empresa desarrolladora de videojuegos, extencion de sony</p>",
+    "sitio_url": null
+  }
+},
+{
+  "model": "catalogo.estudio",
+  "pk": 1,
+  "fields": {
+    "nombre": "Nintendo",
+    "slug": "nintendo",
+    "descripcion": "<p>Marca de videojugos llamada nintendo, la gran &quot;N&quot;</p>",
+    "sitio_url": null,
+    "logo": "estudios/ChatGPT_Image_6_sept_2025_01_52_46_p.m..png",
+    "banner": "estudios/banners/nintendo.png"
+  }
+},
+{
+  "model": "catalogo.estudio",
+  "pk": 3,
+  "fields": {
+    "nombre": "Bungie",
+    "slug": "bungie",
+    "descripcion": "",
+    "sitio_url": null,
+    "logo": "estudios/bungie.png",
+    "banner": "estudios/banners/encabezado_bungie.png"
+  }
+},
+{
+  "model": "catalogo.estudio",
+  "pk": 4,
+  "fields": {
+    "nombre": "Santa Monica",
+    "slug": "santa-monica",
+    "descripcion": "<p>casa creadora de gos of war</p>",
+    "sitio_url": null,
+    "logo": "estudios/santa_monica.png",
+    "banner": "estudios/banners/encabezado_monica.png"
+  }
+},
+{
+  "model": "catalogo.estudio",
+  "pk": 5,
+  "fields": {
+    "nombre": "The Coalition",
+    "slug": "the-coalition",
+    "descripcion": "<p>casa creadora de gear of wars</p>",
+    "sitio_url": null,
+    "logo": "estudios/The_Coalition.png",
+    "banner": "estudios/banners/The_Coalition_encabezado.png"
+  }
+},
+{
+  "model": "catalogo.estudio",
+  "pk": 6,
+  "fields": {
+    "nombre": "Activision",
+    "slug": "activision",
+    "descripcion": "<p>casa creadora de call of duty</p>",
+    "sitio_url": null,
+    "logo": "estudios/activision.png",
+    "banner": ""
+  }
+},
+{
+  "model": "catalogo.tematica",
+  "pk": 1,
+  "fields": {
+    "nombre": "Pixel Art",
+    "slug": "pixel-art",
+    "icono": "tematicas/iconos/pixel_art.png"
+  }
+},
+{
+  "model": "catalogo.tematica",
+  "pk": 2,
+  "fields": {
+    "nombre": "2D",
+    "slug": "2d",
+    "icono": ""
+  }
+},
+{
+  "model": "catalogo.categoria",
+  "pk": 1,
+  "fields": {
+    "nombre": "Playeras",
+    "slug": "playeras",
+    "descripcion": "<p>Playeras de todo tipo y tallas&nbsp;</p>",
+    "imagen": "categorias/pla_mario.png"
+  }
+},
+{
+  "model": "catalogo.categoria",
+  "pk": 2,
+  "fields": {
+    "nombre": "Sueteres",
+    "slug": "sueteres",
+    "descripcion": "<p>sueteres con gorro o sin gorro cualquiera va</p>",
+    "imagen": "categorias/sueter.png"
+  }
+},
+{
+  "model": "catalogo.categoria",
+  "pk": 3,
+  "fields": {
+    "nombre": "Pantalones",
+    "slug": "pantalones",
+    "descripcion": "<p>pantalones de todos los tipos y estilos</p>",
+    "imagen": "categorias/pantalon.png"
+  }
+},
+{
+  "model": "catalogo.categoria",
+  "pk": 4,
+  "fields": {
+    "nombre": "Camisas",
+    "slug": "camisas",
+    "descripcion": "<p>camisas de todo tipo, eso incluye las de mangas largas y cortas</p>",
+    "imagen": "categorias/camisa.png"
+  }
+},
+{
+  "model": "catalogo.categoria",
+  "pk": 5,
+  "fields": {
+    "nombre": "Chamarras",
+    "slug": "chamarras",
+    "descripcion": "<p>chamarras, eso incluye mezclilla y otros tipos</p>",
+    "imagen": "categorias/chamarra.png"
+  }
+},
+{
+  "model": "catalogo.categoria",
+  "pk": 6,
+  "fields": {
+    "nombre": "Calcetines",
+    "slug": "calcetines",
+    "descripcion": "<p>calcetines variados, y muchos estilos</p>",
+    "imagen": "categorias/calcetines.png"
+  }
+},
+{
+  "model": "catalogo.categoria",
+  "pk": 7,
+  "fields": {
+    "nombre": "Calzado",
+    "slug": "calzado",
+    "descripcion": "<p>tenis,zapatos o sandalias</p>",
+    "imagen": "categorias/tenis.png"
+  }
+},
+{
+  "model": "catalogo.segmento",
+  "pk": 1,
+  "fields": {
+    "nombre": "Hombres",
+    "slug": "hombres",
+    "icono": ""
+  }
+},
+{
+  "model": "catalogo.segmento",
+  "pk": 2,
+  "fields": {
+    "nombre": "Mujeres",
+    "slug": "mujeres",
+    "icono": ""
+  }
+},
+{
+  "model": "catalogo.segmento",
+  "pk": 3,
+  "fields": {
+    "nombre": "Niños",
+    "slug": "ninos",
+    "icono": ""
+  }
+},
+{
+  "model": "catalogo.segmento",
+  "pk": 4,
+  "fields": {
+    "nombre": "Unisex",
+    "slug": "unisex",
+    "icono": ""
+  }
+},
+{
+  "model": "catalogo.producto",
+  "pk": 2,
+  "fields": {
+    "nombre": "Playera roja",
+    "slug": "playera-roja-1",
+    "precio": "450.00",
+    "descuento": "5.00",
+    "descripcion": "<p>Playeras color rojo puede ser cualquier marca o compa&ntilde;ia, o inclusive personaje</p>",
+    "imagen": "productos/ChatGPT_Image_6_sept_2025_04_40_46_p.m..png",
+    "stock": 40,
+    "categoria": 1,
+    "marca": 1,
+    "estudio": 1,
+    "segmento": null,
+    "destacado": false,
+    "destacado_orden": 0,
+    "activo": true,
+    "creado": "2025-09-06T22:41:27.247Z",
+    "tematicas": []
+  }
+},
+{
+  "model": "catalogo.producto",
+  "pk": 3,
+  "fields": {
+    "nombre": "sueter master chif",
+    "slug": "sueter-master-chif",
+    "precio": "500.00",
+    "descuento": "0.00",
+    "descripcion": "<p>sudadera de master chif de convate envolve</p>",
+    "imagen": "productos/sueter_master_chif.png",
+    "stock": 20,
+    "categoria": 2,
+    "marca": 2,
+    "estudio": 3,
+    "segmento": null,
+    "destacado": false,
+    "destacado_orden": 0,
+    "activo": true,
+    "creado": "2025-09-07T00:19:56.383Z",
+    "tematicas": []
+  }
+},
+{
+  "model": "catalogo.producto",
+  "pk": 4,
+  "fields": {
+    "nombre": "Chamarra de kratos",
+    "slug": "chamarra-de-kratos",
+    "precio": "700.00",
+    "descuento": "6.00",
+    "descripcion": "<p>chamarra kratos</p>",
+    "imagen": "productos/chamarra_kratos.png",
+    "stock": 25,
+    "categoria": 5,
+    "marca": 3,
+    "estudio": 4,
+    "segmento": null,
+    "destacado": false,
+    "destacado_orden": 0,
+    "activo": true,
+    "creado": "2025-09-07T03:06:26.264Z",
+    "tematicas": []
+  }
+},
+{
+  "model": "catalogo.producto",
+  "pk": 5,
+  "fields": {
+    "nombre": "Converse gear of wars",
+    "slug": "converse-gear-of-wars",
+    "precio": "1200.00",
+    "descuento": "0.00",
+    "descripcion": "",
+    "imagen": "productos/converse_con_logo.png",
+    "stock": 15,
+    "categoria": 7,
+    "marca": 2,
+    "estudio": 5,
+    "segmento": null,
+    "destacado": true,
+    "destacado_orden": 0,
+    "activo": true,
+    "creado": "2025-09-07T04:53:22.994Z",
+    "tematicas": []
+  }
+},
+{
+  "model": "catalogo.producto",
+  "pk": 6,
+  "fields": {
+    "nombre": "Playera negra ghost",
+    "slug": "playera-negra-ghost",
+    "precio": "200.00",
+    "descuento": "0.00",
+    "descripcion": "",
+    "imagen": "productos/ghost.png",
+    "stock": 50,
+    "categoria": 1,
+    "marca": 2,
+    "estudio": 6,
+    "segmento": null,
+    "destacado": false,
+    "destacado_orden": 0,
+    "activo": true,
+    "creado": "2025-09-08T04:34:00.258Z",
+    "tematicas": []
+  }
+},
+{
+  "model": "catalogo.producto",
+  "pk": 7,
+  "fields": {
+    "nombre": "Tenis estilo zelda",
+    "slug": "tenis-estilo-zelda",
+    "precio": "1500.00",
+    "descuento": "20.00",
+    "descripcion": "",
+    "imagen": "productos/tenis_zelda.png",
+    "stock": 25,
+    "categoria": 7,
+    "marca": 1,
+    "estudio": 1,
+    "segmento": null,
+    "destacado": true,
+    "destacado_orden": 1,
+    "activo": true,
+    "creado": "2025-09-08T04:43:34.395Z",
+    "tematicas": []
+  }
+},
+{
+  "model": "catalogo.producto",
+  "pk": 8,
+  "fields": {
+    "nombre": "Tenis edicion kirbi",
+    "slug": "tenis-edicion-kirbi",
+    "precio": "1500.00",
+    "descuento": "0.00",
+    "descripcion": "",
+    "imagen": "productos/tenis_kirbi.png",
+    "stock": 15,
+    "categoria": 7,
+    "marca": 1,
+    "estudio": 1,
+    "segmento": 2,
+    "destacado": true,
+    "destacado_orden": 0,
+    "activo": true,
+    "creado": "2025-09-08T17:23:42.292Z",
+    "tematicas": []
+  }
+},
+{
+  "model": "catalogo.producto",
+  "pk": 9,
+  "fields": {
+    "nombre": "Converse Master Chief",
+    "slug": "converse-master-chief",
+    "precio": "1600.00",
+    "descuento": "0.00",
+    "descripcion": "",
+    "imagen": "productos/converse_master_chef.png",
+    "stock": 10,
+    "categoria": 7,
+    "marca": 2,
+    "estudio": 3,
+    "segmento": 1,
+    "destacado": true,
+    "destacado_orden": 0,
+    "activo": true,
+    "creado": "2025-09-08T17:28:46.800Z",
+    "tematicas": []
+  }
+},
+{
+  "model": "catalogo.producto",
+  "pk": 10,
+  "fields": {
+    "nombre": "Mario Pixel Art",
+    "slug": "mario-pixel-art",
+    "precio": "300.00",
+    "descuento": "0.00",
+    "descripcion": "",
+    "imagen": "productos/pla_mario.png",
+    "stock": 30,
+    "categoria": 1,
+    "marca": 1,
+    "estudio": 1,
+    "segmento": null,
+    "destacado": true,
+    "destacado_orden": 0,
+    "activo": true,
+    "creado": "2025-09-09T16:52:14.880Z",
+    "tematicas": [
+      1
+    ]
+  }
+},
+{
+  "model": "catalogo.productoimagen",
+  "pk": 5,
+  "fields": {
+    "producto": 5,
+    "imagen": "productos/galeria/converse_pWjfWmp.png",
+    "alt": "",
+    "orden": 0,
+    "creado": "2025-09-07T23:14:48.063Z"
+  }
+},
+{
+  "model": "catalogo.newslettersubscriber",
+  "pk": 1,
+  "fields": {
+    "email": "el7969580@gmail.com",
+    "is_confirmed": false,
+    "token": "lkTnLkflX6R0C65xn74HD00ELH_yzMAIiL99jV_xdBc",
+    "created_at": "2025-09-22T23:09:13.640Z",
+    "confirmed_at": null
+  }
+}
+]
