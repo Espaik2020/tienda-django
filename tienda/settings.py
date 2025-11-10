@@ -227,6 +227,14 @@ if ENV("DJ_DB_NAME"):
         },
     }
 
+if ENV("DATABASE_URL"):
+    import dj_database_url
+    DATABASES["default"] = dj_database_url.config(
+        default=ENV("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=True
+    )
+
 # Email por ENV (puedes activar SMTP real sin tocar el código)
 EMAIL_BACKEND = ENV("DJ_EMAIL_BACKEND", EMAIL_BACKEND)
 EMAIL_HOST = ENV("DJ_EMAIL_HOST", EMAIL_HOST)
@@ -262,4 +270,11 @@ if not DEBUG:
     # SECURE_HSTS_SECONDS = 31536000
     # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     # SECURE_HSTS_PRELOAD = True
-
+    
+# === Override definitivo por DATABASE_URL (Postgres en Render) ===
+import os as _os
+_dburl = _os.environ.get("DATABASE_URL")
+if _dburl:
+    import dj_database_url as _dj
+    # Fuerza a tomar la URL exacta que hay en el entorno
+    DATABASES["default"] = _dj.parse(_dburl, conn_max_age=600, ssl_require=True)
