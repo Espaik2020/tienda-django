@@ -129,8 +129,12 @@ USE_TZ = True
 
 # === Archivos estáticos / media ===
 STATIC_URL = "/static/"
+# ✅ Deja aquí solo carpetas "globales" (si las tienes). NO metas 'catalogo/static'.
 STATICFILES_DIRS = [
-    BASE_DIR / "catalogo" / "static",
+    BASE_DIR / "static",   # si no existe, puedes borrar esta línea
+]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 ]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
