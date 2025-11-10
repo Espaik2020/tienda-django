@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Carrito - Tienda{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Helpers de visibilidad (si no los tienes en base.css) */
+  @media (max-width: 991.98px){ .only-desktop{display:none!important} }
+  @media (min-width: 992px){ .only-mobile{display:none!important} }
+
+  /* Cards en móvil */
+  .cart-card{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);border-radius:16px}
+  .cart-thumb{width:64px;height:64px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,255,255,.15)}
+  .qty-btn{width:32px;height:32px;display:grid;place-items:center;border-radius:10px}
+  .summary-card{border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);border-radius:18px}
+  .summary-row{display:flex;justify-content:space-between;align-items:center;margin:.25rem 0}
+  .summary-row .label{color:#a9b8cc}
+  .summary-row.total{font-weight:800;font-size:1.25rem}
+
+  /* Botón principal */
+  .btn-primary-cta{background:#2EE6A8;border:none;color:#05251a;font-weight:800;border-radius:12px}
+</style>
+
+{% if force_mobile %}
+<style>
+  /* Forzar móvil cuando ?m=1 */
+  .only-desktop{display:none!important}
+  .only-mobile{display:block!important}
+</style>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-3">Carrito</h1>
+
+{% if items %}
+
+  {# ================= DESKTOP ================= #}
+  <div class="only-desktop">
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th class="text-center">Cant.</th>
+              <th class="text-end">Precio</th>
+              <th class="text-end">Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for it in items %}
+            <tr>
+              <td>
+                {% if it.producto.imagen %}
+                  <img src="{{ it.producto.imagen.url }}" alt="{{ it.producto.nombre }}"
+                       style="height:40px;width:auto;border-radius:6px;margin-right:8px;border:1px solid rgba(255,255,255,.15)">
+                {% endif %}
+                <a href="{{ it.producto.get_absolute_url }}">{{ it.producto.nombre }}</a>
+              </td>
+
+              <td class="text-center">
+                <a class="btn btn-sm btn-outline-secondary" href="{% url 'carrito_quitar' it.producto.id %}">−</a>
+                <span class="mx-2">{{ it.cantidad }}</span>
+                <a class="btn btn-sm btn-outline-secondary" href="{% url 'carrito_agregar' it.producto.id %}?qty=1">+</a>
+              </td>
+
+              <td class="text-end">$ {{ it.precio_unit|floatformat:2 }}</td>
+              <td class="text-end">$ {{ it.subtotal|floatformat:2 }}</td>
+
+              <td class="text-end">
+                <a class="btn btn-sm btn-outline-danger" href="{% url 'carrito_quitar' it.producto.id %}?all=1">Quitar</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <a href="{% url 'producto_lista' %}" class="btn btn-outline-secondary">Seguir comprando</a>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="p-4 summary-card">
+          <h5 class="mb-3">Resumen del pedido</h5>
+
+          <div class="summary-row">
+            <span class="label">Subtotal</span>
+            <span>$ {{ subtotal|floatformat:2 }}</span>
+          </div>
+
+          {% if descuento_total and descuento_total > 0 %}
+          <div class="summary-row">
+            <span class="label">Descuentos</span>
+            <span>− $ {{ descuento_total|floatformat:2 }}</span>
+          </div>
+          {% endif %}
+
+          <div class="summary-row">
+            <span class="label">Envío estimado</span>
+            <span>$ {{ envio_estimado|floatformat:2 }}</span>
+          </div>
+
+          <hr class="my-3">
+
+          <div class="summary-row total">
+            <span>Total</span>
+            <span>$ {{ total_con_envio|floatformat:2 }}</span>
+          </div>
+
+          <a class="btn btn-primary-cta w-100 mt-3" href="{% url 'producto_lista' %}?ofertas=1">Proceder al pago</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# ================= MÓVIL ================= #}
+  <div class="only-mobile">
+    <div class="d-flex flex-column gap-3">
+      {% for it in items %}
+      <div class="cart-card p-3">
+        <div class="d-flex gap-3 align-items-center">
+          {% if it.producto.imagen %}
+            <img class="cart-thumb" src="{{ it.producto.imagen.url }}" alt="{{ it.producto.nombre }}">
+          {% endif %}
+          <div class="flex-grow-1">
+            <a class="d-block fw-bold text-white" href="{{ it.producto.get_absolute_url }}">{{ it.producto.nombre }}</a>
+            <div class="small text-white-50">Precio: $ {{ it.precio_unit|floatformat:2 }}</div>
+          </div>
+          <a class="btn btn-sm btn-outline-danger" href="{% url 'carrito_quitar' it.producto.id %}?all=1">Quitar</a>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-between mt-3">
+          <div class="d-flex align-items-center gap-2">
+            <a class="btn btn-outline-light qty-btn" href="{% url 'carrito_quitar' it.producto.id %}">−</a>
+            <span class="fw-bold">{{ it.cantidad }}</span>
+            <a class="btn btn-outline-light qty-btn" href="{% url 'carrito_agregar' it.producto.id %}?qty=1">+</a>
+          </div>
+          <div class="fw-bold">$ {{ it.subtotal|floatformat:2 }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="summary-card p-3 mt-4">
+      <h5 class="mb-2">Resumen del pedido</h5>
+
+      <div class="summary-row">
+        <span class="label">Subtotal</span>
+        <span>$ {{ subtotal|floatformat:2 }}</span>
+      </div>
+
+      {% if descuento_total and descuento_total > 0 %}
+      <div class="summary-row">
+        <span class="label">Descuentos</span>
+        <span>− $ {{ descuento_total|floatformat:2 }}</span>
+      </div>
+      {% endif %}
+
+      <div class="summary-row">
+        <span class="label">Envío estimado</span>
+        <span>$ {{ envio_estimado|floatformat:2 }}</span>
+      </div>
+
+      <hr class="my-2">
+
+      <div class="summary-row total">
+        <span>Total</span>
+        <span>$ {{ total_con_envio|floatformat:2 }}</span>
+      </div>
+
+      <a class="btn btn-primary-cta w-100 mt-3" href="{% url 'producto_lista' %}?ofertas=1">Proceder al pago</a>
+    </div>
+
+    <a href="{% url 'producto_lista' %}" class="btn btn-outline-light w-100 mt-3">Seguir comprando</a>
+  </div>
+
+{% else %}
+  <div class="text-center">
+    <p>Tu carrito está vacío.</p>
+    <a href="{% url 'producto_lista' %}" class="btn btn-primary">Ver productos</a>
+  </div>
+{% endif %}
+{% endblock %}

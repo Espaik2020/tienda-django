@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}{{ marca.nombre }} - Marcas{% endblock %}
+{% block content %}
+
+<!-- Encabezado de la marca -->
+<div class="d-flex align-items-center gap-3 mb-3">
+  {% if marca.logo %}
+    <img src="{{ marca.logo.url }}" alt="{{ marca.nombre }}" style="height:56px; border-radius:8px;">
+  {% endif %}
+  <div>
+    <h1 class="m-0">{{ marca.nombre }}</h1>
+    {% if marca.descripcion %}<div class="text-muted small mt-1">{{ marca.descripcion|safe }}</div>{% endif %}
+  </div>
+</div>
+
+<!-- Sub-filtro por Estudios (solo los que tienen productos) -->
+{% if estudios_marca %}
+  <ul class="nav nav-pills mb-3 flex-wrap">
+    <li class="nav-item me-2 mb-2">
+      <a class="nav-link {% if not estudio_f %}active{% endif %}" href="{{ marca.get_absolute_url }}">
+        Todos
+      </a>
+    </li>
+    {% for e in estudios_marca %}
+      <li class="nav-item me-2 mb-2">
+        <a class="nav-link d-flex align-items-center gap-2 {% if estudio_f == e.slug %}active{% endif %}"
+           href="{{ marca.get_absolute_url }}?estudio={{ e.slug }}">
+          {% if e.logo %}<img src="{{ e.logo.url }}" alt="" style="height:16px; width:auto;">{% endif %}
+          <span>{{ e.nombre }}</span>
+          <span class="badge bg-secondary">{{ e.num_prod }}</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<!-- Grid de productos -->
+<div class="row g-3">
+  {% for p in productos %}
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="card h-100">
+        {% if p.imagen %}
+          <a href="{{ p.get_absolute_url }}"><img src="{{ p.imagen.url }}" class="card-img-top" alt="{{ p.nombre }}"></a>
+        {% endif %}
+        <div class="card-body d-flex flex-column">
+          <h6 class="card-title mb-1">
+            <a href="{{ p.get_absolute_url }}" class="text-decoration-none">{{ p.nombre }}</a>
+          </h6>
+          {% if p.estudio %}<div class="text-muted small mb-1">Estudio: {{ p.estudio.nombre }}</div>{% endif %}
+          {% if p.categoria %}<div class="text-muted small mb-2">{{ p.categoria.nombre }}</div>{% endif %}
+
+          <div class="mb-2 fw-semibold">
+            {% if p.descuento and p.descuento|floatformat != "0" %}
+              <del class="text-muted">$ {{ p.precio|floatformat:2 }}</del>
+              <span>$ {{ p.precio_final|floatformat:2 }}</span>
+            {% else %}
+              $ {{ p.precio|floatformat:2 }}
+            {% endif %}
+          </div>
+
+          <div class="mt-auto d-flex gap-2">
+            <a href="{{ p.get_absolute_url }}" class="btn btn-sm btn-outline-primary">Ver</a>
+            {% if p.disponible %}
+              <a href="{% url 'carrito_agregar' p.id %}?qty=1" class="btn btn-sm btn-primary">Agregar</a>
+            {% else %}
+              <button class="btn btn-sm btn-secondary" disabled>Sin stock</button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No hay productos para esta selección.</p>
+  {% endfor %}
+</div>
+
+<!-- Paginación (conserva ?estudio=...) -->
+{% if is_paginated %}
+  <nav class="mt-3" aria-label="Paginación">
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link"
+             href="{% if estudio_f %}{{ marca.get_absolute_url }}?estudio={{ estudio_f }}&page={{ page_obj.previous_page_number }}{% else %}{{ marca.get_absolute_url }}?page={{ page_obj.previous_page_number }}{% endif %}">
+            « Anterior
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">« Anterior</span></li>
+      {% endif %}
+
+      {% for num in paginator.page_range %}
+        {% if num == page_obj.number %}
+          <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link"
+               href="{% if estudio_f %}{{ marca.get_absolute_url }}?estudio={{ estudio_f }}&page={{ num }}{% else %}{{ marca.get_absolute_url }}?page={{ num }}{% endif %}">
+              {{ num }}
+            </a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link"
+             href="{% if estudio_f %}{{ marca.get_absolute_url }}?estudio={{ estudio_f }}&page={{ page_obj.next_page_number }}{% else %}{{ marca.get_absolute_url }}?page={{ page_obj.next_page_number }}{% endif %}">
+            Siguiente »
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">Siguiente »</span></li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endif %}
+
+{% endblock %}

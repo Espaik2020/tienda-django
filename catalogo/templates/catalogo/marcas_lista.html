@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Marcas - Tienda{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Contenedor de círculos */
+  .brand-circles{
+    display:flex; flex-wrap:wrap; gap:18px;
+    padding:8px 2px 6px;
+  }
+  /* En móvil: carrusel horizontal */
+  @media (max-width: 991.98px){
+    .brand-circles{
+      flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch;
+      padding-bottom: 12px; gap:14px; scrollbar-width:none;
+    }
+    .brand-circles::-webkit-scrollbar{ display:none; }
+  }
+
+  /* Item */
+  .bc-item{
+    flex:0 0 auto; width:110px;
+    text-align:center; text-decoration:none; color:inherit;
+  }
+
+  /* Círculo (recorta y permite que el logo llene) */
+  .bc-circle{
+    width:110px; height:110px; border-radius:50%;
+    display:grid; place-items:center;
+    background: rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
+    transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+    position: relative; overflow: hidden;
+  }
+  .bc-item:hover .bc-circle{
+    transform: translateY(-2px);
+    background: rgba(255,255,255,.09);
+    box-shadow: 0 6px 16px -12px rgba(0,0,0,.45);
+  }
+
+  /* Logo dentro del círculo (llena el círculo) */
+  .bc-circle img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover; object-position:center;
+    border-radius:50%; display:block;
+  }
+
+  .bc-initial{ font-weight:800; font-size:1.15rem; opacity:.9; }
+
+  .bc-name{
+    display:block; margin-top:.5rem; font-weight:800; font-size:.95rem;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+
+  /* Centrado + ancho máximo cómodo en desktop */
+  .section-title { text-align: center; }
+  .brand-circles{
+    justify-content: center;
+    gap: 24px 28px;
+    max-width: 1100px;
+    margin-inline: auto;
+  }
+
+  /* Un poco más grandes en desktop */
+  .bc-item   { width: 120px; }
+  .bc-circle { width: 120px; height: 120px; }
+
+  /* En móvil: centrado (sin desplazamiento lateral) */
+  @media (max-width: 991.98px){
+    .section-title { text-align: center; }
+    .brand-circles{
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px 18px;
+      overflow-x: visible;
+      padding: 10px 4px 20px;
+    }
+    .bc-item   { width: 100px; }
+    .bc-circle { width: 100px; height: 100px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1 class="section-title h3 mb-3">Marcas</h1>
+
+<div class="brand-circles">
+  {% for m in marcas %}
+    <a class="bc-item" href="{{ m.get_absolute_url }}" title="{{ m.nombre }}">
+      <span class="bc-circle">
+        {% if m.logo %}
+          <img src="{{ m.logo.url }}" alt="{{ m.nombre }}">
+        {% else %}
+          <span class="bc-initial">{{ m.nombre|first|upper }}</span>
+        {% endif %}
+      </span>
+      <span class="bc-name">{{ m.nombre }}</span>
+    </a>
+  {% empty %}
+    <p class="text-white-50">No hay marcas todavía.</p>
+  {% endfor %}
+</div>
+
+<hr class="my-4" style="border-color:rgba(255,255,255,.08);">
+
+<h2 class="section-title h5 mb-3" style="text-align:left;">Productos populares</h2>
+
+<div class="row g-3 product-grid">
+  {% if productos_populares %}
+    {% for p in productos_populares %}
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="card product-card h-100 tilt">
+          <span class="shine"></span>
+
+          <a href="{{ p.get_absolute_url }}">
+            {% if p.portada_url %}
+              <img src="{{ p.portada_url }}" class="card-img-top" alt="{{ p.nombre }}" loading="lazy">
+            {% elif p.imagen %}
+              <img src="{{ p.imagen.url }}" class="card-img-top" alt="{{ p.nombre }}" loading="lazy">
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1200&auto=format&fit=crop"
+                   class="card-img-top" alt="{{ p.nombre }}" loading="lazy">
+            {% endif %}
+          </a>
+
+          <div class="card-body d-flex flex-column">
+            <h6 class="card-title mb-1">
+              <a href="{{ p.get_absolute_url }}" class="text-decoration-none">{{ p.nombre }}</a>
+            </h6>
+
+            {% if p.marca %}
+              <div class="text-muted small mb-1">{{ p.marca.nombre }}</div>
+            {% endif %}
+
+            <div class="mb-2 fw-semibold">
+              {% if p.descuento and p.descuento|floatformat != "0" %}
+                <del class="text-muted">$ {{ p.precio|floatformat:2 }}</del>
+                <span>$ {{ p.precio_final|floatformat:2 }}</span>
+              {% else %}
+                $ {{ p.precio|floatformat:2 }}
+              {% endif %}
+            </div>
+
+            <div class="mt-auto d-flex gap-2">
+              <a href="{{ p.get_absolute_url }}" class="btn btn-sm btn-outline-primary">Ver</a>
+              {% if p.disponible %}
+                <a href="{% url 'carrito_agregar' p.id %}?qty=1" class="btn btn-sm btn-primary">Agregar</a>
+              {% else %}
+                <button class="btn btn-sm btn-secondary" disabled>Sin stock</button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="text-white-50">Aún no hay productos para mostrar.</p>
+  {% endif %}
+</div>
+{% endblock %}
+
+
+

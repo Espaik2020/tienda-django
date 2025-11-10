@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block title %}{{ producto.nombre }} - Tienda{% endblock %}
+
+{% block content %}
+
+<style>
+  /* Estilos mínimos para la galería */
+  .img-main {
+    width: 100%;
+    max-height: 520px;
+    object-fit: contain;
+    background: #0b0b0b;
+    border-radius: 10px;
+  }
+  .thumb {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: .85;
+    border: 2px solid transparent;
+  }
+  .thumb:hover,
+  .thumb.active {
+    opacity: 1;
+    border-color: #0d6efd;
+  }
+</style>
+
+<a href="{% url 'producto_lista' %}" class="btn btn-link p-0 mb-3">&larr; Volver a productos</a>
+
+<div class="row g-4">
+  <!-- IMÁGENES -->
+  <div class="col-md-5">
+    {% with principal=producto.portada_url %}
+      {% if principal %}
+        <img id="imgPrincipal"
+             src="{{ principal }}"
+             alt="{{ producto.nombre }}"
+             class="img-main mb-2">
+      {% else %}
+        <div class="border rounded d-flex align-items-center justify-content-center" style="height:280px;">
+          <span class="text-muted">Sin imagen</span>
+        </div>
+      {% endif %}
+
+      {# Thumbnails debajo #}
+      {% if galeria and galeria|length > 0 or principal %}
+        <div class="d-flex gap-2 flex-wrap mt-2">
+          {# 1) Miniatura de la principal #}
+          {% if principal %}
+            <img src="{{ principal }}"
+                 alt="{{ producto.nombre }}"
+                 class="thumb active"
+                 data-big="{{ principal }}">
+          {% endif %}
+
+          {# 2) Miniaturas de la galería (evitar duplicar la principal) #}
+          {% for img in galeria %}
+            {% if img.imagen.url != principal %}
+              <img src="{{ img.imagen.url }}"
+                   alt="{{ img.alt|default:producto.nombre }}"
+                   class="thumb"
+                   data-big="{{ img.imagen.url }}">
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- INFO -->
+  <div class="col-md-7">
+    <h1 class="mb-1">{{ producto.nombre }}</h1>
+
+    <p class="text-muted mb-2">
+      {% if producto.marca %}{{ producto.marca.nombre }} · {% endif %}
+      {% if producto.categoria %}{{ producto.categoria.nombre }}{% endif %}
+      {% if producto.estudio %} · {{ producto.estudio.nombre }}{% endif %}
+    </p>
+
+    <div class="mb-3">
+      {% if producto.descuento and producto.descuento|floatformat != "0" %}
+        <div><del class="text-muted">$ {{ producto.precio|floatformat:2 }}</del></div>
+        <div class="fs-3 fw-bold">$ {{ producto.precio_final|floatformat:2 }}</div>
+        <small class="text-success">-{{ producto.descuento|floatformat:0 }}%</small>
+      {% else %}
+        <div class="fs-3 fw-bold">$ {{ producto.precio|floatformat:2 }}</div>
+      {% endif %}
+    </div>
+
+    {% if producto.descripcion %}
+      <div class="mb-3">{{ producto.descripcion|safe }}</div>
+    {% endif %}
+
+    <p class="mb-3"><strong>Stock:</strong> {{ producto.stock }}</p>
+
+    {% if producto.disponible %}
+      <form action="{% url 'carrito_agregar' producto.id %}" method="get" class="d-flex gap-2 align-items-center">
+        <label for="qty" class="form-label m-0">Cantidad</label>
+        <input id="qty" name="qty" type="number" class="form-control" value="1" min="1" max="{{ producto.stock }}" style="width:100px;">
+        <button class="btn btn-primary">Agregar al carrito</button>
+      </form>
+    {% else %}
+      <button class="btn btn-secondary" disabled>Sin stock</button>
+    {% endif %}
+
+    <div class="mt-3 d-flex gap-2">
+      <a href="{% url 'carrito_detalle' %}" class="btn btn-outline-dark">Ver carrito</a>
+    </div>
+  </div>
+</div>
+
+{# Modal para zoom #}
+<div class="modal fade" id="zoomModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content bg-dark">
+      <div class="modal-body p-0">
+        <img id="zoomImg" class="w-100" style="max-height:80vh; object-fit:contain;" alt="">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const main = document.getElementById('imgPrincipal');
+  const thumbs = document.querySelectorAll('.thumb');
+
+  thumbs.forEach(t => {
+    t.addEventListener('click', () => {
+      thumbs.forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      const big = t.getAttribute('data-big');
+      if (big && main) {
+        main.src = big;
+        main.alt = t.alt || '';
+      }
+    });
+
+    // Doble click en miniatura -> abrir modal zoom
+    t.addEventListener('dblclick', () => {
+      const big = t.getAttribute('data-big');
+      const modalImg = document.getElementById('zoomImg');
+      if (big && modalImg) {
+        modalImg.src = big;
+        const modal = new bootstrap.Modal(document.getElementById('zoomModal'));
+        modal.show();
+      }
+    });
+  });
+
+  // Click en la imagen principal -> zoom
+  if (main) {
+    main.addEventListener('click', () => {
+      const modalImg = document.getElementById('zoomImg');
+      if (modalImg) {
+        modalImg.src = main.src;
+        const modal = new bootstrap.Modal(document.getElementById('zoomModal'));
+        modal.show();
+      }
+    });
+  }
+});
+</script>
+
+{% endblock %}
+

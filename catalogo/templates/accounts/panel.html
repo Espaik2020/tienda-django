@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title_tag %}Mi cuenta{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* ---------- Visibilidad (mobile-first) ---------- */
+  .only-desktop{ display:none; }
+  .only-mobile { display:block; }
+  @media (min-width: 992px){
+    .only-desktop{ display:block; }
+    .only-mobile { display:none; }
+  }
+
+  /* ---------- Base compartida mínima ---------- */
+  .acct-avatar{
+    width:110px;height:110px;border-radius:50%;object-fit:cover;
+    border:3px solid rgba(255,255,255,.25);background:#0b1020;box-shadow:0 8px 30px rgba(0,0,0,.35)
+  }
+  .acct-handle{color:#9db0c8;font-weight:600}
+  .username-gradient{
+    background:linear-gradient(90deg,#ffd6f9,#b28cff,#86d0ff,#7bffcc,#ffd6f9);
+    background-size:300% 100%;
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; color:transparent;
+    animation:usernameFlow 6s linear infinite;
+    font-weight:900; letter-spacing:.4px;
+  }
+  @keyframes usernameFlow{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+
+  /* =================================================
+     DESKTOP (scope exclusivo)
+     =================================================*/
+  #acct-desktop .acct-card{
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.04);
+    border-radius:20px;
+  }
+  #acct-desktop .acct-list .list-group-item{
+    background:rgba(255,255,255,.03); color:#e8eef7;
+    border:1px solid rgba(255,255,255,.12); border-radius:14px; margin-bottom:10px;
+    padding:18px 18px; transition:transform .12s ease, background .12s ease, border-color .12s ease;
+  }
+  #acct-desktop .acct-list .list-group-item:hover{
+    background:rgba(255,255,255,.05);
+    border-color:rgba(255,255,255,.18);
+    transform: translateY(-1px);
+  }
+  /* Íconos blancos en desktop */
+  #acct-desktop .acct-list i[class^="bi-"],
+  #acct-desktop .acct-list i[class*=" bi-"],
+  #acct-desktop .acct-list .mi{
+    color:#fff !important; opacity:1 !important; font-size:1.1rem;
+  }
+
+  /* =================================================
+     MÓVIL (scope exclusivo)
+     =================================================*/
+  #acct-mobile .acct-mobile-card{
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.04);
+    border-radius:16px;
+    padding:14px;
+  }
+  #acct-mobile .acct-mobile-row{display:flex;align-items:center;gap:12px}
+  #acct-mobile .acct-mobile-name{font-weight:800;line-height:1.1}
+  #acct-mobile .acct-mobile-email{color:#a9b8cc;font-size:.9rem}
+  #acct-mobile .btn-neon{background:#2EE6A8!important;color:#05251a!important;border:none!important;font-weight:800}
+
+  /* Tiles de acciones móviles */
+  #acct-mobile .acct-list .list-group-item{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:14px;
+    margin-bottom:10px;
+    padding:12px 14px;
+  }
+  #acct-mobile .acct-list i[class^="bi-"],
+  #acct-mobile .acct-list i[class*=" bi-"],
+  #acct-mobile .acct-list .mi{
+    color:#fff !important; opacity:1 !important;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ===== MÓVIL: acceso rápido; edición va a /cuenta/editar/ ===== #}
+<div id="acct-mobile" class="only-mobile">
+  <div class="acct-mobile-card mb-3">
+    <div class="acct-mobile-row">
+      <img
+        src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'img/avatar-placeholder.png' %}{% endif %}"
+        class="acct-avatar" alt="Avatar">
+      <div>
+        <div class="acct-mobile-name username-gradient">
+          {{ request.user.profile.name_for_display }}
+        </div>
+        <div class="acct-mobile-email">@{{ request.user.username }}</div>
+      </div>
+    </div>
+
+    <div class="mt-3" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <a href="{% url 'cuenta_editar' %}" class="btn btn-neon">Editar perfil</a>
+      <a href="{% url 'logout' %}" class="btn btn-outline-light">Salir</a>
+    </div>
+  </div>
+
+  <div class="acct-mobile-card">
+    <div class="acct-label mb-2">Acciones rápidas</div>
+    <div class="list-group acct-list">
+      <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="{% url 'producto_lista' %}?ofertas=1">
+        <span><i class="bi bi-tag me-2"></i>Ver ofertas</span>
+        <i class="bi bi-chevron-right"></i>
+      </a>
+      <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="{% url 'producto_lista' %}">
+        <span><i class="bi bi-bag me-2"></i>Explorar productos</span>
+        <i class="bi bi-chevron-right"></i>
+      </a>
+      <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="{% url 'marcas_lista' %}">
+        <span><i class="bi bi-star me-2"></i>Marcas</span>
+        <i class="bi bi-chevron-right"></i>
+      </a>
+      <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="{% url 'carrito_detalle' %}">
+        <span><i class="bi bi-cart3 me-2"></i>Ver carrito</span>
+        <i class="bi bi-chevron-right"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+{# ===== DESKTOP ===== #}
+<div id="acct-desktop" class="only-desktop">
+  <div class="row g-4">
+    <!-- Columna izquierda: perfil + menú tipo app -->
+    <div class="col-12 col-lg-5">
+      <div class="p-4 acct-card h-100 text-center">
+        <img
+          src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'img/avatar-placeholder.png' %}{% endif %}"
+          class="acct-avatar mb-3" alt="Avatar">
+
+        <h3 class="mb-1 username-gradient">{{ request.user.profile.name_for_display }}</h3>
+        <p class="acct-handle mb-3">@{{ request.user.username }}</p>
+
+        <div class="d-grid mb-4">
+          <a class="btn btn-success fw-bold" href="{% url 'cuenta_editar' %}">
+            Editar perfil
+          </a>
+        </div>
+
+        <div class="list-group acct-list text-start">
+          <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between" href="{% url 'cuenta_pedidos' %}">
+            <span><i class="bi bi-clock-history me-2 text-white"></i>Pedidos recientes</span>
+            <i class="bi bi-chevron-right text-white"></i>
+          </a>
+          <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between" href="{% url 'cuenta_editar' %}">
+            <span><i class="bi bi-gear me-2"></i>Configuración del perfil</span>
+            <i class="bi bi-chevron-right"></i>
+          </a>
+          <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between" href="{% url 'cuenta_metodos_pago' %}">
+            <span><i class="bi bi-credit-card me-2 text-white"></i>Métodos de pago</span>
+            <i class="bi bi-chevron-right text-white"></i>
+          </a>
+          <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between" href="{% url 'cuenta_direcciones' %}">
+            <span><i class="bi bi-geo-alt me-2 text-white"></i>Direcciones de envío</span>
+            <i class="bi bi-chevron-right text-white"></i>
+          </a>
+          <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between" href="{% url 'producto_lista' %}?ofertas=1">
+            <span><i class="bi bi-tag me-2"></i>Ofertas</span>
+            <i class="bi bi-chevron-right"></i>
+          </a>
+          <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between" href="{% url 'carrito_detalle' %}">
+            <span><i class="bi bi-cart3 me-2"></i>Ver carrito</span>
+            <i class="bi bi-chevron-right"></i>
+          </a>
+          <form method="post" action="{% url 'logout' %}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between m-0 p-0">
+            {% csrf_token %}
+            <button type="submit" class="w-100 text-start btn btn-link py-3 px-3"
+                    style="text-decoration:none; color:inherit;">
+              <span><i class="bi bi-box-arrow-right me-2 text-white"></i>Cerrar sesión</span>
+              <i class="bi bi-chevron-right text-white float-end"></i>
+            </button>
+          </form>
+        </div>
+      </div> <!-- /acct-card -->
+    </div>   <!-- /col izquierda -->
+
+    <!-- Columna derecha: resumen (sin formulario; edición va aparte) -->
+    <div class="col-12 col-lg-7">
+      <div class="p-4 acct-card h-100">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h4 class="m-0 fw-bold">Resumen</h4>
+          <span class="text-white-50 small">Usuario: <strong>{{ request.user.username }}</strong></span>
+        </div>
+        <ul class="list-unstyled m-0">
+          <li class="mb-2">• Aquí verás recomendaciones personalizadas según tus compras.</li>
+          <li class="mb-2">• Para editar tu información ve a <strong>Configuración del perfil</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

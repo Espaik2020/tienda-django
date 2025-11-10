@@ -1,0 +1,921 @@
+<!doctype html>
+<html lang="es">
+<head>
+  {% load static %}
+  <meta charset="utf-8">
+  <title>{% block title_tag %}Tienda de Ropa{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preconnect: performance fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Tipografías -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- AOS (animaciones al hacer scroll) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"/>
+
+  <!-- ====== ICONOS / PWA ====== -->
+  <!-- Favicon clásico + tamaños -->
+  <link rel="icon" href="{% static 'icons/favicon.ico' %}" sizes="any">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'icons/favicon-16x16.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icons/favicon-32x32.png' %}">
+  <!-- Apple Touch Icon -->
+  <link rel="apple-touch-icon" href="{% static 'icons/apple-touch-icon.png' %}">
+  <!-- PWA icons -->
+  <link rel="icon" type="image/png" sizes="192x192" href="{% static 'icons/icon-192.png' %}">
+  <link rel="icon" type="image/png" sizes="512x512" href="{% static 'icons/icon-512.png' %}">
+  <!-- Manifest PWA -->
+  <link rel="manifest" href="{% static 'manifest.webmanifest' %}">
+  <!-- Theme colors -->
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="msapplication-TileColor" content="#0b1020">
+  <!-- iOS PWA helpers -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- ====== SEO / Social ====== -->
+  <meta name="description" content="{% block meta_description %}Moda gamer inspirada en tus mundos favoritos. Playeras, hoodies y más.{% endblock %}">
+  <link rel="canonical" href="{{ request.build_absolute_uri|default:'' }}">
+
+  <!-- OpenGraph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DNM Wear">
+  <meta property="og:title" content="{% block og_title %}Tienda de Ropa{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Moda gamer inspirada en tus mundos favoritos. Playeras, hoodies y más.{% endblock %}">
+  <meta property="og:image" content="{% static 'img/og-cover.jpg' %}">
+  <meta property="og:url" content="{{ request.build_absolute_uri|default:'' }}">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% block tw_title %}Tienda de Ropa{% endblock %}">
+  <meta name="twitter:description" content="{% block tw_description %}Moda gamer inspirada en tus mundos favoritos. Playeras, hoodies y más.{% endblock %}">
+  <meta name="twitter:image" content="{% static 'img/og-cover.jpg' %}">
+
+  <!-- Tu CSS -->
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+
+  <!-- CSS extra por página (ej. mobile-home.css en Home) -->
+  {% block extra_css %}{% endblock %}
+
+  <!-- Evita FOUC: oculta UI móvil por defecto en desktop -->
+  <style>
+    .only-mobile{display:none!important}
+    .only-desktop{display:block!important}
+  </style>
+
+  <!-- === Estilos del layout (tu versión) === -->
+  <style>
+    .header-row{ display:flex; align-items:center; gap:12px; flex-wrap:nowrap; min-height:64px; }
+    .header-left,.header-right{ display:flex; align-items:center; gap:12px; flex-shrink:0; min-width:0; }
+    .header-center{ display:flex; justify-content:center; flex:1 1 auto; min-width:0; }
+
+    .brand-logo{ display:block; height:36px; width:auto; object-fit:contain; filter:drop-shadow(0 1px 6px rgba(0,0,0,.25)); }
+    @media (min-width:1200px){ .brand-logo{ height:44px; } }
+
+    .nav-left{ display:none; }
+    @media (min-width:992px){ .nav-left{ display:flex; } }
+    .nav-left .nav-link{ padding:0 .25rem; }
+
+    /* Desktop */
+    .search-wrap{ width:100%; max-width:640px; }
+
+    /* Móvil: buscador centrado en la MISMA fila */
+    @media (max-width: 991.98px){}
+      /* grilla: [izq] [buscador] [der] */
+      .header-row{
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 10px;
+        min-height: 60px;
+        padding-block: 8px;
+      }
+
+      .header-left{ min-width: 0; }
+      .header-center{ display:block; min-width: 0; } /* aquí vive el buscador */
+      .header-right{ min-width: 0; }
+
+      .search-wrap{
+        display: block !important;  /* asegúrate de que NO se oculte en móvil */
+        width: 100%;
+        max-width: none;
+      }
+
+
+    @media (max-width:1199.98px){ .hello-user{ display:none!important; } }
+
+    .navbar .dropdown-menu{ position:absolute; }
+    .navbar-toggler{ outline:none!important; box-shadow:none!important; }
+
+    .menu-section{
+      position:relative; text-transform:uppercase; font-size:.85rem; letter-spacing:.08em; font-weight:700;
+      margin-bottom:.5rem; opacity:.95;
+      background:linear-gradient(90deg,#ff5f6d 0%,#ffc371 20%,#65ffe1 40%,#7aa2ff 60%,#e07bff 80%,#ff5f6d 100%);
+      background-size:300% 100%; animation:menuShine 6s linear infinite, hueCycle 12s linear infinite;
+      display:inline-block; color:transparent!important; -webkit-text-fill-color:transparent!important;
+      background-clip:text!important; -webkit-background-clip:text!important; filter:saturate(120%);
+    }
+    .menu-section::after{ content:attr(data-text); position:absolute; inset:0; z-index:-1; color:transparent;
+      text-shadow:0 0 1px rgba(255,255,255,.28),0 0 6px rgba(101,255,225,.18); pointer-events:none;}
+    @keyframes menuShine{0%{background-position:0% center}100%{background-position:300% center}}
+    @keyframes hueCycle{0%{filter:hue-rotate(0deg) saturate(120%)}100%{filter:hue-rotate(360deg) saturate(120%)}}
+    .menu-section:hover{ animation-duration:4s,10s }
+    @media (prefers-reduced-motion:reduce){ .menu-section{ animation:none } }
+
+    .navbar .dropdown-menu-dark .dropdown-item.brand-anim[data-brand="nintendo"]{ --brand:#e60012; }
+    .navbar .dropdown-menu-dark .dropdown-item.brand-anim[data-brand="playstation"],
+    .navbar .dropdown-menu-dark .dropdown-item.brand-anim[data-brand="play-station"]{ --brand:#0a66ff; }
+    .navbar .dropdown-menu-dark .dropdown-item.brand-anim[data-brand="xbox"]{ --brand:#04a304; }
+
+    .navbar .dropdown-menu-dark .dropdown-item.brand-anim{
+      display:flex; align-items:center; gap:.6rem; font-weight:700; color:#ffffff; background:transparent; opacity:1;
+    }
+    .navbar .dropdown-menu-dark .dropdown-item.brand-anim .brand-icon{
+      height:16px; width:auto; object-fit:contain; opacity:.95; filter:drop-shadow(0 0 6px rgba(0,0,0,.25));
+    }
+    .navbar .dropdown-menu-dark .dropdown-item.brand-anim .label{
+      color:inherit; -webkit-text-fill-color:inherit; text-shadow:none;
+    }
+    .navbar .dropdown-menu.show .dropdown-item.brand-anim .label{ animation: brandWhiteToColor 1.8s linear infinite; }
+    @keyframes brandWhiteToColor{ 0%,100%{color:#fff;-webkit-text-fill-color:#fff;} 50%{color:var(--brand);-webkit-text-fill-color:var(--brand);} }
+    .navbar .dropdown-menu-dark .dropdown-item.brand-anim:hover,
+    .navbar .dropdown-menu-dark .dropdown-item.brand-anim:focus{ background-color: rgba(255,255,255,.06); }
+
+    @keyframes fadeSlideUp { from { opacity:0; transform:translateY(12px);} to {opacity:1; transform:none;} }
+    main .card { will-change: transform, opacity; }
+    .card.stagger-in { animation: fadeSlideUp .45s ease forwards; }
+
+    .brand-lane{
+      position:relative; overflow:hidden; border-radius:20px;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .brand-lane .brand-track{
+      display:flex; gap:1.25rem; align-items:center; padding:1rem 1.25rem;
+      width:max-content;
+      animation: brandScroll 22s linear infinite;
+    }
+    .brand-lane:hover .brand-track{ animation-play-state: paused; }
+    @keyframes brandScroll{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+
+    .brand-lane::after{
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent);
+      mix-blend-mode: screen;
+      transform: translateX(-100%);
+      animation: laneShine 4.5s linear infinite;
+    }
+    @keyframes laneShine{ from{ transform: translateX(-100%);} to{ transform: translateX(100%);} }
+    @media (prefers-reduced-motion:reduce){
+      .brand-lane .brand-track{ animation:none; }
+      .brand-lane::after{ animation:none; }
+    }
+
+    .brand-card{
+      --brand: #7aa2ff;
+      display:inline-flex; align-items:center; gap:.6rem;
+      padding:.65rem 1.05rem;
+      border-radius:999px;
+      text-decoration:none; white-space:nowrap; line-height:1; font-weight:700;
+      color:#cfe3ff; background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.12);
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+    }
+    .brand-card img{
+      height:36px; width:auto; object-fit:contain; display:block;
+      filter: grayscale(0%) opacity(1);
+      transition: filter .18s ease, transform .18s ease;
+    }
+    @media (min-width:1200px){
+      .brand-card img{ height:40px; }
+    }
+    .brand-card .txt{ display:none; }
+    .brand-card:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.10);
+      color:#fff;
+      box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand) 35%, transparent),
+                  0 6px 20px -8px color-mix(in oklab, var(--brand) 60%, transparent);
+      border-color: color-mix(in oklab, var(--brand) 60%, rgba(255,255,255,.12));
+    }
+    .brand-card:hover img{ transform: translateY(-1px); }
+
+    .brand-card[data-brand="nintendo"]     { --brand:#e60012; }
+    .brand-card[data-brand="playstation"],
+    .brand-card[data-brand="play-station"] { --brand:#0a66ff; }
+    .brand-card[data-brand="xbox"]         { --brand:#04a304; }
+    .brand-card[data-brand="sega"]         { --brand:#00a3e0; }
+    .brand-card[data-brand="capcom"]       { --brand:#ffd100; }
+    .brand-card[data-brand="square-enix"]  { --brand:#e0e0e0; }
+    .brand-card[data-brand="ubisoft"]      { --brand:#79c8ff; }
+    .brand-card[data-brand="ea"]           { --brand:#ff4747; }
+    .brand-card[data-brand="rockstar"]     { --brand:#ffcc00; }
+    .brand-card[data-brand="bandai-namco"] { --brand:#ff7a00; }
+    .brand-card[data-brand="bethesda"]     { --brand:#bfbfbf; }
+    .brand-card[data-brand="blizzard"]     { --brand:#3aa9ff; }
+
+    .offcanvas-gamer .brand-chip{
+      display:inline-flex; align-items:center; gap:.5rem;
+      padding:.5rem .9rem; border-radius:999px; font-weight:800; line-height:1; white-space:nowrap;
+      background: rgba(255,255,255,.07);
+      color:#e6f1ff !important; border:1px solid currentColor; text-decoration:none !important;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    .offcanvas-gamer .brand-chip .brand-dot{ display:none !important; }
+
+    .offcanvas-gamer .brand-chip[data-brand="nintendo"]     { color:#e60012 !important; }
+    .offcanvas-gamer .brand-chip[data-brand="xbox"]         { color:#107c10 !important; }
+    .offcanvas-gamer .brand-chip[data-brand="playstation"],
+    .offcanvas-gamer .brand-chip[data-brand="play-station"]{
+      color:#0a66ff !important; border-color:#0a66ff !important;
+      background: color-mix(in oklab, #0a66ff 18%, transparent);
+    }
+    .offcanvas-gamer .brand-chip[data-brand="playstation"]:hover,
+    .offcanvas-gamer .brand-chip[data-brand="playstation"]:focus-visible,
+    .offcanvas-gamer .brand-chip[data-brand="play-station"]:hover,
+    .offcanvas-gamer .brand-chip[data-brand="play-station"]:focus-visible{
+      background: color-mix(in oklab, #0a66ff 26%, transparent);
+      box-shadow: 0 0 0 3px color-mix(in oklab, #0a66ff 30%, transparent);
+    }
+
+    .footer-gamer{
+      background:
+        radial-gradient(800px 600px at -10% 120%, #1e2650 0%, transparent 60%),
+        linear-gradient(180deg, #0b1020, #151c36);
+      color: var(--txt, #e6f1ff);
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .footer-title{
+      font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+      margin-bottom: .75rem; color: #fff;
+    }
+    .footer-link{
+      display: inline-block; padding: .25rem 0; color: #cfd8ff; text-decoration: none;
+    }
+    .footer-link:hover{ color:#fff; text-decoration: underline; }
+    .social-btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:36px; height:36px; border-radius:999px;
+      background: rgba(255,255,255,.06); color:#cfd8ff;
+      border:1px solid rgba(255,255,255,.08);
+      transition: transform .15s ease, background .15s ease, color .15s ease;
+    }
+    .social-btn:hover{ transform: translateY(-2px); background:rgba(255,255,255,.12); color:#fff; }
+    .pay-badge{
+      display:inline-block; padding:.35rem .6rem; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color:#e6f1ff; font-weight:700; font-size:.8rem;
+    }
+    .footer-gamer .copyright{
+      border-top: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.25);
+    }
+
+    .brand-lane--xl{
+      border-radius:28px;
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.16);
+    }
+    .brand-lane--xl .brand-track{
+      padding:1.25rem 1.75rem;
+      gap:2rem;
+      animation-duration: 32s;
+    }
+    .brand-lane--xl::after{
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+    }
+
+    .offcanvas-gamer .brand-chip--lg{
+      padding:.8rem 1.2rem;
+      font-size:1.05rem;
+      border-width:2px;
+    }
+
+    .brands-head{
+      display:flex; align-items:center; justify-content:space-between; gap:1rem;
+      margin-bottom:.75rem;
+    }
+
+    /* ===== NAV INFERIOR MÓVIL ===== */
+    body.has-mobile-nav { /* deja espacio para que no tape contenido */
+      padding-bottom: calc(64px + env(safe-area-inset-bottom));
+    }
+
+    .mobile-bottom-nav{
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 1050; /* por encima del contenido y del footer */
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+      background: rgba(8, 12, 24, 0.88);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+
+    .mobile-bottom-nav .mb-item{
+      --active: #2EE6A8;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: #cfd8ff;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1;
+      padding: 6px 4px;
+      border-radius: 12px;
+      transition: transform .15s ease, background .15s ease, color .15s ease;
+    }
+
+    .mobile-bottom-nav .mb-item svg{
+      width: 22px; height: 22px;
+      display: block;
+      fill: currentColor;
+      opacity: .9;
+    }
+
+    .mobile-bottom-nav .mb-item:active{
+      transform: translateY(1px);
+    }
+
+    .mobile-bottom-nav .mb-item.active{
+      color: #fff;
+      background: color-mix(in oklab, var(--active) 18%, transparent);
+      box-shadow: 0 0 0 3px color-mix(in oklab, var(--active) 30%, transparent) inset;
+    }
+
+    /* Solo visible en móvil */
+    @media (min-width: 992px){
+      .mobile-bottom-nav{ display: none; }
+      body.has-mobile-nav { padding-bottom: 0; }
+    }
+    
+  </style>
+  <!-- Iconos: Bootstrap Icons -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container header-row">
+
+    <!-- IZQUIERDA: hamburguesa + logo + nav (desktop) -->
+    <div class="header-left">
+      <button class="navbar-toggler border-0"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#menuLateral"
+              aria-controls="menuLateral"
+              aria-label="Abrir menú">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <a href="{% url 'inicio' %}" class="d-inline-flex align-items-center" aria-label="Inicio">
+        <img src="{% static 'img/logo.png' %}" alt="DNM Wear" class="brand-logo">
+      </a>
+
+      <!-- Links a la izquierda (solo en desktop) -->
+      <ul class="navbar-nav nav-left flex-row ms-2 align-items-center">
+        <li class="nav-item me-3">
+          <a class="nav-link" href="{% url 'producto_lista' %}">Productos</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navMarcas" role="button"
+             data-bs-toggle="dropdown" aria-expanded="false">
+            Compañías
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navMarcas" style="max-height:60vh; overflow:auto;">
+            {% if marcas_menu %}
+              {% for m in marcas_menu %}
+                <li>
+                  <a class="dropdown-item brand-anim"
+                     data-brand="{{ m.nombre|slugify }}"
+                     href="{{ m.get_absolute_url }}">
+                    {% if m.logo %}
+                      <img src="{{ m.logo.url }}" alt="" class="brand-icon" aria-hidden="true">
+                    {% endif %}
+                    <span class="label">{{ m.nombre }}</span>
+                  </a>
+                </li>
+              {% endfor %}
+              <li><hr class="dropdown-divider"></li>
+            {% else %}
+              <!-- Fallback con 3 marcas si aún no hay registros -->
+              <li>
+                <a class="dropdown-item brand-anim" data-brand="nintendo" href="{% url 'producto_lista' %}?marca=nintendo">
+                  <span class="label">Nintendo</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item brand-anim" data-brand="playstation" href="{% url 'producto_lista' %}?marca=playstation">
+                  <span class="label">PlayStation</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item brand-anim" data-brand="xbox" href="{% url 'producto_lista' %}?marca=xbox">
+                  <span class="label">Xbox</span>
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+            {% endif %}
+            <li><a class="dropdown-item" href="{% url 'marcas_lista' %}">Ver todas</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <!-- CENTRO: buscador centrado (solo desktop) -->
+    <div class="header-center">
+      <form class="search-wrap" method="get" action="{% url 'producto_lista' %}">
+        <input class="form-control" type="search" name="q" placeholder="Buscar" value="{{ q }}">
+      </form>
+    </div>
+
+    <div class="header-right">
+      <a href="{% url 'carrito_detalle' %}" class="btn btn-outline-light">Carrito</a>
+
+      {% if user.is_authenticated %}
+        <a href="{% url 'cuenta_perfil' %}" class="navbar-text text-white-50 hello-user user-link" title="Ir a mi perfil">
+          Hola, {{ user.get_full_name|default:user.username }}
+        </a>
+
+        <form method="post" action="{% url 'account_logout' %}" class="d-none d-lg-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-light">Salir</button>
+        </form>
+      {% else %}
+        <a class="btn btn-outline-primary d-none d-lg-inline-flex" href="{% url 'account_login' %}?next={{ request.path }}">Ingresar</a>
+        <a class="btn btn-primary d-none d-lg-inline-flex" href="{% url 'account_signup' %}?next={{ request.path }}">Registrarse</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+{% if messages %}
+  <div class="container mt-3">
+    {% for m in messages %}
+      <div class="alert alert-{{ m.tags|default:'info' }} mb-2" role="alert">{{ m }}</div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<main class="container py-4">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer-gamer mt-5">
+  <div class="container py-5">
+    <div class="row g-4">
+      <!-- Col 1: Guía de compras -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <h6 class="footer-title">Guía de compras</h6>
+        <ul class="list-unstyled m-0">
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="como-comprar">¿Cómo comprar?</a></li>
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="faq">Preguntas frecuentes</a></li>
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="pagos">Pagos</a></li>
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="envio">Envío</a></li>
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="cambios">Cambios y devoluciones</a></li>
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="rastreo">Rastrea tu pedido</a></li>
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="facturacion">Facturación</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 2: Empresa -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <h6 class="footer-title">Empresa</h6>
+        <ul class="list-unstyled m-0">
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="quienes-somos">¿Quiénes somos?</a></li>
+          <li><a class="footer-link" href="mailto:hola@dnmwear.mx">Contacto</a></li>
+          <li><a class="footer-link" href="{% url 'marcas_lista' %}">Nuestras marcas</a></li>
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="proveedores">Proveedores</a></li>
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="corporativo">Ventas corporativas</a></li>
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="sucursales">Sucursales</a></li>
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="bolsa-trabajo">Únete al equipo</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Políticas -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <h6 class="footer-title">Políticas</h6>
+        <ul class="list-unstyled m-0">
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="privacidad">Política de privacidad</a></li>
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="cookies">Política de cookies</a></li>
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="compra">Política de compra</a></li>
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="terminos">Términos y condiciones</a></li>
+          <li><a class="footer-link" href="#" data-bs-toggle="modal" data-bs-target="#footerInfoModal" data-footer="aviso">Aviso de privacidad</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Horarios + Redes -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <h6 class="footer-title">Horarios de atención</h6>
+        <p class="m-0 small text-white-50">
+          Lunes a Viernes: 9:00am a 6:00pm<br>
+          Sábados: 9:00am a 2:00pm
+        </p>
+        <div class="d-flex gap-2 mt-3">
+          <a class="social-btn" href="https://twitter.com" target="_blank" aria-label="Twitter" rel="noopener">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.23 4.23 0 0 0 1.85-2.34 8.37 8.37 0 0 1-2.66 1.02 4.19 4.19 0 0 0-7.14 3.82A11.9 11.9 0 0 1 3.16 4.9a4.18 4.18 0 0 0 1.3 5.6 4.16 4.16 0 0 1-1.9-.53v.05a4.19 4.19 0 0 0 3.36 4.11 4.2 4.2 0 0 1-1.89.07 4.2 4.2 0 0 0 3.9 2.9A8.4 8.4 0 0 1 2 19.54 11.86 11.86 0 0 0 8.29 21c7.55 0 11.68-6.26 11.68-11.68 0-.18 0-.36-.01-.54A8.35 8.35 0 0 0 22.46 6z"/></svg>
+          </a>
+          <a class="social-btn" href="https://facebook.com" target="_blank" aria-label="Facebook" rel="noopener">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.9v-7H7.9V12h2.54V9.8c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.23.2 2.23.2v2.45h-1.26c-1.24 0-1.62.77-1.62 1.56V12h2.76l-.44 2.9h-2.32v7A10 10 0 0 0 22 12z"/></svg>
+          </a>
+          <a class="social-btn" href="https://instagram.com" target="_blank" aria-label="Instagram" rel="noopener">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5a5 5 0 1 0 .001 10.001A5 5 0 0 0 12 7zm6.5-.25a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5zM12 9a3 3 0 1 1-.001 6.001A3 3 0 0 1 12 9z"/></svg>
+          </a>
+          <a class="social-btn" href="https://tiktok.com" target="_blank" aria-label="TikTok" rel="noopener">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M16.5 3a6 6 0 0 0 4.5 2V8a9 9 0 0 1-5-1.5v7.25a5.75 5.75 0 1 1-5.75-5.75c.42 0 .83.05 1.22.14v3.07a2.75 2.75 0 1 0 1.78 2.57V3h3.25z"/></svg>
+          </a>
+          <a class="social-btn" href="https://youtube.com" target="_blank" aria-label="YouTube" rel="noopener">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.7 31.7 0  0 0 0 12a31.7 31.7 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.75 15.02V8.98L15 12l-5.25 3.02z"/></svg>
+          </a>
+        </div>
+
+        <div class="mt-3 d-flex flex-wrap gap-2">
+          <a class="btn btn-outline-light btn-sm" href="tel:+528180000000">Llámanos</a>
+          <a class="btn btn-neon btn-sm" href="https://wa.me/528100000000" target="_blank" rel="noopener">WhatsApp</a>
+          <a class="btn btn-outline-light btn-sm" href="mailto:hola@dnmwear.mx">Email</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Métodos de pago -->
+    <div class="pt-4">
+      <h6 class="footer-title mb-3">Métodos de pago</h6>
+      <div class="d-flex flex-wrap gap-2">
+        <span class="pay-badge">BBVA</span>
+        <span class="pay-badge">Santander</span>
+        <span class="pay-badge">Scotiabank</span>
+        <span class="pay-badge">PayPal</span>
+        <span class="pay-badge">Mercado Pago</span>
+        <span class="pay-badge">7-ELEVEN</span>
+        <span class="pay-badge">VISA</span>
+        <span class="pay-badge">OXXO</span>
+        <span class="pay-badge">AMEX</span>
+        <span class="pay-badge">Mastercard</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="copyright text-center py-3 mt-4">
+    <small>Copyright © {% now "Y" %} DNM Wear</small>
+  </div>
+</footer>
+
+<!-- Modal informativo del footer -->
+<div class="modal fade" id="footerInfoModal" tabindex="-1" aria-hidden="true" aria-labelledby="footerInfoTitle">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header">
+        <h5 class="modal-title" id="footerInfoTitle">Información</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body" id="footerInfoBody">
+        Cargando…
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Menú lateral offcanvas -->
+<div class="offcanvas offcanvas-start offcanvas-gamer text-bg-dark"
+     tabindex="-1"
+     id="menuLateral"
+     aria-labelledby="menuLateralLabel">
+
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="menuLateralLabel">Navegación</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+  </div>
+
+  <div class="offcanvas-body d-flex flex-column h-100 p-0">
+    <div class="flex-grow-1 overflow-auto d-flex flex-column gap-3 px-3 pb-3">
+
+      <form class="d-none" role="search" method="get" action="{% url 'producto_lista' %}">
+        <input class="form-control me-2" name="q" type="search" placeholder="Buscar productos..." aria-label="Buscar">
+        <button class="btn btn-outline-light" type="submit">Buscar</button>
+      </form>
+
+      <div>
+        <div class="menu-section mb-2" data-text="Rápido">Rápido</div>
+        <div class="list-group list-group-flush">
+          <a class="list-group-item list-group-item-action menu-link" href="{% url 'producto_lista' %}">Todos los productos</a>
+          <a class="list-group-item list-group-item-action menu-link" href="{% url 'producto_lista' %}?destacados=1">Destacados</a>
+          <a class="list-group-item list-group-item-action menu-link" href="{% url 'producto_lista' %}?ofertas=1">Ofertas</a>
+          <a class="list-group-item list-group-item-action menu-link" href="{% url 'marcas_lista' %}">Marcas</a>
+          <a class="list-group-item list-group-item-action menu-link" href="{% url 'carrito_detalle' %}">Carrito</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="menu-section mb-2" data-text="Segmentos">Segmentos</div>
+        <div class="d-flex flex-wrap gap-2">
+          {% if segmentos_menu %}
+            {% for s in segmentos_menu %}
+              <a class="btn btn-sm btn-outline-light rounded-pill menu-link"
+                 href="{% url 'producto_lista' %}?segmento={{ s.slug }}">{{ s.nombre }}</a>
+            {% endfor %}
+          {% else %}
+            <a class="btn btn-sm btn-outline-light rounded-pill menu-link" href="{% url 'producto_lista' %}?segmento=hombres">Hombres</a>
+            <a class="btn btn-sm btn-outline-light rounded-pill menu-link" href="{% url 'producto_lista' %}?segmento=mujeres">Mujeres</a>
+            <a class="btn btn-sm btn-outline-light rounded-pill menu-link" href="{% url 'producto_lista' %}?segmento=ninos">Niños</a>
+            <a class="btn btn-sm btn-outline-light rounded-pill menu-link" href="{% url 'producto_lista' %}?segmento=unisex">Unisex</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div>
+        <div class="menu-section mb-2" data-text="Categorías">Categorías</div>
+        <div class="list-group list-group-flush">
+          {% if categorias_menu %}
+            {% for c in categorias_menu %}
+              <a class="list-group-item list-group-item-action menu-link"
+                 href="{% url 'producto_lista' %}?cat={{ c.slug }}">{{ c.nombre }}</a>
+            {% endfor %}
+          {% else %}
+            <a class="list-group-item list-group-item-action menu-link" href="{% url 'producto_lista' %}?cat=playeras">Playeras</a>
+            <a class="list-group-item list-group-item-action menu-link" href="{% url 'producto_lista' %}?cat=hoodies">Hoodies</a>
+            <a class="list-group-item list-group-item-action menu-link" href="{% url 'producto_lista' %}?cat=pantalones">Pantalones</a>
+            <a class="list-group-item list-group-item-action menu-link" href="{% url 'producto_lista' %}?cat=calzado">Calzado</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Carril “Nuestras marcas” (DEBAJO de Categorías) -->
+      <div>
+        <div class="brands-head">
+          <div class="menu-section mb-2" data-text="Nuestras marcas">Nuestras marcas</div>
+          <a class="btn btn-outline-light btn-sm" href="{% url 'marcas_lista' %}">Ver todas</a>
+        </div>
+
+        <div class="brand-lane brand-lane--xl">
+          <div class="brand-track">
+            {% if marcas_menu %}
+              {% for m in marcas_menu %}
+                <a class="brand-chip brand-chip--lg"
+                   data-brand="{{ m.nombre|slugify }}"
+                   href="{{ m.get_absolute_url }}">
+                  <span class="brand-dot"></span>{{ m.nombre }}
+                </a>
+              {% endfor %}
+            {% else %}
+              <!-- Fallback con chips gamer -->
+              <a class="brand-chip brand-chip--lg" data-brand="nintendo" href="{% url 'producto_lista' %}?marca=nintendo"><span class="brand-dot"></span>Nintendo</a>
+              <a class="brand-chip brand-chip--lg" data-brand="playstation" href="{% url 'producto_lista' %}?marca=playstation"><span class="brand-dot"></span>PlayStation</a>
+              <a class="brand-chip brand-chip--lg" data-brand="xbox" href="{% url 'producto_lista' %}?marca=xbox"><span class="brand-dot"></span>Xbox</a>
+              <a class="brand-chip brand-chip--lg" data-brand="sega" href="{% url 'producto_lista' %}?marca=sega"><span class="brand-dot"></span>Sega</a>
+              <a class="brand-chip brand-chip--lg" data-brand="capcom" href="{% url 'producto_lista' %}?marca=capcom"><span class="brand-dot"></span>Capcom</a>
+              <a class="brand-chip brand-chip--lg" data-brand="square-enix" href="{% url 'producto_lista' %}?marca=square-enix"><span class="brand-dot"></span>Square Enix</a>
+              <a class="brand-chip brand-chip--lg" data-brand="ubisoft" href="{% url 'producto_lista' %}?marca=ubisoft"><span class="brand-dot"></span>Ubisoft</a>
+              <a class="brand-chip brand-chip--lg" data-brand="ea" href="{% url 'producto_lista' %}?marca=ea"><span class="brand-dot"></span>EA</a>
+              <a class="brand-chip brand-chip--lg" data-brand="rockstar" href="{% url 'producto_lista' %}?marca=rockstar"><span class="brand-dot"></span>Rockstar</a>
+              <a class="brand-chip brand-chip--lg" data-brand="bandai-namco" href="{% url 'producto_lista' %}?marca=bandai-namco"><span class="brand-dot"></span>Bandai Namco</a>
+              <a class="brand-chip brand-chip--lg" data-brand="bethesda" href="{% url 'producto_lista' %}?marca=bethesda"><span class="brand-dot"></span>Bethesda</a>
+              <a class="brand-chip brand-chip--lg" data-brand="blizzard" href="{% url 'producto_lista' %}?marca=blizzard"><span class="brand-dot"></span>Blizzard</a>
+            {% endif %}
+
+            <!-- Duplicado para scroll infinito -->
+            {% if marcas_menu %}
+              {% for m in marcas_menu %}
+                <a class="brand-chip brand-chip--lg"
+                   data-brand="{{ m.nombre|slugify }}"
+                   href="{{ m.get_absolute_url }}">
+                  <span class="brand-dot"></span>{{ m.nombre }}
+                </a>
+              {% endfor %}
+            {% else %}
+              <a class="brand-chip brand-chip--lg" data-brand="nintendo" href="{% url 'producto_lista' %}?marca=nintendo"><span class="brand-dot"></span>Nintendo</a>
+              <a class="brand-chip brand-chip--lg" data-brand="playstation" href="{% url 'producto_lista' %}?marca=playstation"><span class="brand-dot"></span>PlayStation</a>
+              <a class="brand-chip brand-chip--lg" data-brand="xbox" href="{% url 'producto_lista' %}?marca=xbox"><span class="brand-dot"></span>Xbox</a>
+              <a class="brand-chip brand-chip--lg" data-brand="sega" href="{% url 'producto_lista' %}?marca=sega"><span class="brand-dot"></span>Sega</a>
+              <a class="brand-chip brand-chip--lg" data-brand="capcom" href="{% url 'producto_lista' %}?marca=capcom"><span class="brand-dot"></span>Capcom</a>
+              <a class="brand-chip brand-chip--lg" data-brand="square-enix" href="{% url 'producto_lista' %}?marca=square-enix"><span class="brand-dot"></span>Square Enix</a>
+              <a class="brand-chip brand-chip--lg" data-brand="ubisoft" href="{% url 'producto_lista' %}?marca=ubisoft"><span class="brand-dot"></span>Ubisoft</a>
+              <a class="brand-chip brand-chip--lg" data-brand="ea" href="{% url 'producto_lista' %}?marca=ea"><span class="brand-dot"></span>EA</a>
+              <a class="brand-chip brand-chip--lg" data-brand="rockstar" href="{% url 'producto_lista' %}?marca=rockstar"><span class="brand-dot"></span>Rockstar</a>
+              <a class="brand-chip brand-chip--lg" data-brand="bandai-namco" href="{% url 'producto_lista' %}?marca=bandai-namco"><span class="brand-dot"></span>Bandai Namco</a>
+              <a class="brand-chip brand-chip--lg" data-brand="bethesda" href="{% url 'producto_lista' %}?marca=bethesda"><span class="brand-dot"></span>Bethesda</a>
+              <a class="brand-chip brand-chip--lg" data-brand="blizzard" href="{% url 'producto_lista' %}?marca=blizzard"><span class="brand-dot"></span>Blizzard</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <!-- /Carril marcas -->
+
+      <div>
+        <div class="menu-section mb-2" data-text="Cuenta">Cuenta</div>
+        <div class="d-grid gap-2">
+          {% if user.is_authenticated %}
+            <span class="text-white-50">Hola, {{ user.username }}</span>
+            <a class="btn w-100 btn-neon menu-link" href="{% url 'producto_lista' %}">Explorar tienda</a>
+            <a class="btn w-100 btn-outline-light menu-link" href="{% url 'carrito_detalle' %}">Ver carrito</a>
+          {% else %}
+            <a class="btn btn-outline-light menu-link" href="{% url 'account_login' %}?next={{ request.path }}">Ingresar</a>
+            <a class="btn btn-neon menu-link" href="{% url 'account_signup' %}?next={{ request.path }}">Registrarse</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-auto border-top border-secondary px-3 py-3">
+      {% if user.is_authenticated %}
+        <form method="post" action="{% url 'account_logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-light w-100 menu-link">Salir</button>
+        </form>
+      {% else %}
+        <a class="btn btn-outline-light w-100 menu-link" href="{% url 'account_login' %}?next={{ request.path }}">Iniciar sesión</a>
+      {% endif %}
+  </div>
+</div>
+
+<!-- ===== JS ===== -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+<script src="https://unpkg.com/htmx.org@1.9.12" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
+<script defer>
+  document.addEventListener('DOMContentLoaded', () => { if (window.AOS) AOS.init({ once: true }); });
+</script>
+
+<!-- Footer modal content loader -->
+<script defer>
+  const FOOTER_INFO = {
+    "como-comprar": `
+      <p class="mb-2">1) Explora categorías o usa el buscador.</p>
+      <p class="mb-2">2) Entra al producto, elige talla y añade al carrito.</p>
+      <p class="mb-0">3) Finaliza tu compra desde el carrito con tus datos y método de pago.</p>`,
+    "faq": `<p>Pronto publicaremos las preguntas más frecuentes. Escríbenos por WhatsApp si necesitas ayuda inmediata.</p>`,
+    "pagos": `<p>Aceptamos tarjetas (Visa, Mastercard, AMEX), PayPal, Mercado Pago y pago en OXXO.</p>`,
+    "envio": `<p>Envíos a todo México. Tiempo estimado: 2–5 días hábiles.</p>`,
+    "cambios": `<p>Tienes 15 días para cambios y devoluciones. La prenda debe venir con etiquetas y sin uso.</p>`,
+    "rastreo": `<p>Te enviaremos el número de guía por email al despachar tu pedido.</p>`,
+    "facturacion": `<p>Solicita tu factura dentro de los 7 días naturales posteriores a tu compra: <a href="mailto:facturas@dnmwear.mx">facturas@dnmwear.mx</a></p>`,
+    "quienes-somos": `<p>DNM Wear: moda gamer hecha en México. Diseñamos ropa inspirada en tus mundos favoritos.</p>`,
+    "proveedores": `<p>¿Quieres vendernos o colaborar? Escríbenos a <a href="mailto:proveedores@dnmwear.mx">proveedores@dnmwear.mx</a>.</p>`,
+    "corporativo": `<p>Pedidos corporativos y mayoreo: <a href="mailto:corporativo@dnmwear.mx">corporativo@dnmwear.mx</a></p>`,
+    "sucursales": `<p>Próximamente tiendas físicas. Mientras tanto: envíos a todo el país.</p>`,
+    "bolsa-trabajo": `<p>Mándanos tu CV a <a href="mailto:talento@dnmwear.mx">talento@dnmwear.mx</a>.</p>`,
+    "privacidad": `<p>Tratamos tus datos con responsabilidad conforme a la normativa vigente.</p>`,
+    "cookies": `<p>Usamos cookies para mejorar tu experiencia. Puedes gestionarlas en la configuración del navegador.</p>`,
+    "compra": `<p>Los precios pueden cambiar sin previo aviso. Promociones sujetas a disponibilidad.</p>`,
+    "terminos": `<p>Al comprar aceptas nuestros términos y condiciones. Contáctanos para cualquier duda.</p>`,
+    "aviso": `<p>Consulta el aviso de privacidad completo solicitándolo por correo.</p>`
+  };
+
+  document.addEventListener('show.bs.modal', function (ev) {
+    const trg = ev.relatedTarget;
+    if (!trg || !trg.dataset.footer) return;
+    const key = trg.dataset.footer;
+    const title = trg.textContent.trim();
+    document.getElementById('footerInfoTitle').textContent = title || 'Información';
+    document.getElementById('footerInfoBody').innerHTML = FOOTER_INFO[key] || '<p>Información no disponible por ahora.</p>';
+  });
+</script>
+
+<!-- Cerrar offcanvas al hacer clic en un enlace -->
+<script defer>
+  document.addEventListener('click', function(e){
+    const link = e.target.closest('#menuLateral .menu-link');
+    if(!link) return;
+    const el = document.getElementById('menuLateral');
+    const oc = bootstrap.Offcanvas.getInstance(el);
+    if (oc) oc.hide();
+  });
+</script>
+
+<!-- Animación de entrada para cards de productos -->
+<script defer>
+  function animateProductCards() {
+    const cards = document.querySelectorAll('main .card');
+    cards.forEach((card, i) => {
+      card.classList.remove('stagger-in');
+      card.style.animationDelay = (i * 90) + 'ms';
+      requestAnimationFrame(() => card.classList.add('stagger-in'));
+    });
+  }
+  document.addEventListener('DOMContentLoaded', animateProductCards);
+  document.addEventListener('htmx:afterSwap', animateProductCards);
+</script>
+
+<!-- Tu JS -->
+<script src="{% static 'js/app.js' %}" defer></script>
+
+<!-- Registro del Service Worker -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register("{% static 'sw.js' %}")
+      .catch(err => console.error('SW failed:', err));
+  });
+}
+</script>
+<script>
+  // habilita el padding inferior
+  document.documentElement.classList.add('js');
+  document.body.classList.add('has-mobile-nav');
+
+  // resaltar item activo según la URL
+  (function(){
+    const path = location.pathname;
+    const map = [
+      {sel:'[data-route="inicio"]',    test:(p)=> p==='/' || p.startsWith('{% url "inicio" %}') },
+      {sel:'[data-route="productos"]', test:(p)=> p.includes('{% url "producto_lista" %}'.replace(window.location.origin,'')) || p.includes('/producto') },
+      {sel:'[data-route="marcas"]',    test:(p)=> p.includes('{% url "marcas_lista" %}'.replace(window.location.origin,'')) || p.includes('/marca') },
+      {sel:'[data-route="carrito"]',   test:(p)=> p.includes('{% url "carrito_detalle" %}'.replace(window.location.origin,'')) },
+      {sel:'[data-route="cuenta"]',    test:(p)=> p.includes('/accounts/') || p.includes('/login') || p.includes('/signup') }
+    ];
+    const nav = document.querySelector('.mobile-bottom-nav');
+    if(!nav) return;
+    map.some(({sel,test})=>{
+      const a = nav.querySelector(sel);
+      if(a && test(path)){ a.classList.add('active'); return true; }
+      return false;
+    });
+  })();
+
+  // Opcional: ocultar barra cuando aparece el teclado (Android/iOS) para inputs
+  window.addEventListener('focusin', (e)=>{
+    if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA'){
+      document.querySelector('.mobile-bottom-nav')?.classList.add('kb-hide');
+    }
+  });
+  window.addEventListener('focusout', ()=>{
+    document.querySelector('.mobile-bottom-nav')?.classList.remove('kb-hide');
+  });
+</script>
+
+
+{% block extra_js %}{% endblock %}
+<!-- ===== NAV INFERIOR MÓVIL ===== -->
+<nav class="mobile-bottom-nav d-lg-none" role="navigation" aria-label="Navegación inferior">
+  <a href="{% url 'inicio' %}"        class="mb-item" data-route="inicio">
+    <!-- Home -->
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 8h-3v10H6V11H3l9-8z"/></svg>
+    <span>Inicio</span>
+  </a>
+
+  <a href="{% url 'producto_lista' %}" class="mb-item" data-route="productos">
+    <!-- Bag -->
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l1 14H5L6 7zm3-4h6v3H9V3z"/></svg>
+    <span>Productos</span>
+  </a>
+
+  <a href="{% url 'marcas_lista' %}"   class="mb-item" data-route="marcas">
+    <!-- Store -->
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7l2-4h12l2 4v3H4V7zm0 5h16v7H4v-7z"/></svg>
+    <span>Marcas</span>
+  </a>
+
+  {# Reemplaza este bloque del carrito por este de Cuenta #}
+  {% if user.is_authenticated %}
+    <a href="{% url 'cuenta_panel' %}" class="mb-item" data-route="cuenta">
+      <!-- User -->
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-5 0-9 2.5-9 5.5V22h18v-2.5C21 16.5 17 14 12 14z"/>
+      </svg>
+      <span>Cuenta</span>
+    </a>
+
+  {% else %}
+    <a href="{% url 'account_login' %}?next={{ request.path }}" class="mb-item" data-route="cuenta">
+      <!-- User -->
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-5 0-9 2.5-9 5.5V22h18v-2.5C21 16.5 17 14 12 14z"/></svg>
+      <span>Cuenta</span>
+    </a>
+  {% endif %}
+</nav>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

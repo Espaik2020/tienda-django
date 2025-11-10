@@ -1,0 +1,7 @@
+Django==5.2.5
+gunicorn
+whitenoise
+pymysql
+mysqlclient
+django-ckeditor
+django-allauth

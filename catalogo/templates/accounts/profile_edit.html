@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title_tag %}Editar perfil{% endblock %}
+
+{% block extra_css %}
+<style>
+  .acct-card{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);border-radius:20px}
+  .acct-avatar{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.25);background:#0b1020}
+  .form-check-input{transform:translateY(2px)}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container px-0">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h1 class="section-title h4 m-0">Editar perfil</h1>
+      <a href="{% url 'cuenta_panel' %}" class="btn btn-outline-light btn-sm">Volver a mi cuenta</a>
+    </div>
+
+    <div class="p-4 acct-card">
+      <div class="d-flex align-items-center gap-3 mb-4">
+        <div class="acct-avatar">
+          {% if profile.avatar %}
+            <img src="{{ profile.avatar.url }}" alt="Avatar" class="acct-avatar">
+          {% else %}
+            <img src="{% static 'img/avatar-placeholder.png' %}" alt="Avatar" class="acct-avatar">
+          {% endif %}
+        </div>
+        <div>
+          <div class="fw-bold fs-5 mb-1">{{ profile.name_for_display|default:request.user.username }}</div>
+          <div class="text-white-50 small">@{{ request.user.username }}</div>
+        </div>
+      </div>
+
+      <form method="post" enctype="multipart/form-data" class="row g-3">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="col-12">
+            <div class="alert alert-danger py-2 mb-2">
+              {% for e in form.non_field_errors %}{{ e }}{% if not forloop.last %}<br>{% endif %}{% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="col-12 col-md-6">
+          <label class="form-label">{{ form.display_name.label }}</label>
+          {{ form.display_name }}
+          {% for e in form.display_name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label class="form-label d-block">{{ form.avatar.label }}</label>
+          {{ form.avatar }}
+          {% for e in form.avatar.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="col-12"><hr class="border-secondary"></div>
+
+        <div class="col-12 col-md-4">
+          <label class="form-label">{{ form.phone.label }}</label>
+          {{ form.phone }}
+          {% for e in form.phone.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label class="form-label">{{ form.gamer_tag.label }}</label>
+          {{ form.gamer_tag }}
+          {% for e in form.gamer_tag.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label class="form-label">{{ form.favorite_platform.label }}</label>
+          {{ form.favorite_platform }}
+          {% for e in form.favorite_platform.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label class="form-label">{{ form.birth_date.label }}</label>
+          {{ form.birth_date }}
+          {% for e in form.birth_date.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="col-12"><hr class="border-secondary"></div>
+
+        <div class="col-12 col-md-6">
+          <label class="form-label">{{ form.street.label }}</label>
+          {{ form.street }}
+          {% for e in form.street.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label">{{ form.district.label }}</label>
+          {{ form.district }}
+          {% for e in form.district.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-12 col-md-4">
+          <label class="form-label">{{ form.city.label }}</label>
+          {{ form.city }}
+          {% for e in form.city.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-12 col-md-4">
+          <label class="form-label">{{ form.state.label }}</label>
+          {{ form.state }}
+          {% for e in form.state.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-12 col-md-4">
+          <label class="form-label">{{ form.zipcode.label }}</label>
+          {{ form.zipcode }}
+          {% for e in form.zipcode.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="col-12">
+          <div class="form-check">
+            {{ form.newsletter_ok }} <label class="form-check-label ms-1" for="{{ form.newsletter_ok.id_for_label }}">{{ form.newsletter_ok.label }}</label>
+          </div>
+          {% for e in form.newsletter_ok.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="col-12 d-flex gap-2 mt-2">
+          <button class="btn btn-primary" type="submit">Guardar cambios</button>
+          <a href="{% url 'cuenta_panel' %}" class="btn btn-outline-light">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

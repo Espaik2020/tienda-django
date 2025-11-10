@@ -1,0 +1,30 @@
+{% extends "info/_page_base.html" %}
+{% block content %}
+<h1>Preguntas frecuentes</h1>
+<div class="accordion" id="faq">
+  <div class="accordion-item bg-transparent text-light border-secondary">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f1">¿Cuánto tarda el envío?</button>
+    </h2>
+    <div id="f1" class="accordion-collapse collapse" data-bs-parent="#faq">
+      <div class="accordion-body">De 2 a 5 días hábiles en México, según tu localidad.</div>
+    </div>
+  </div>
+  <div class="accordion-item bg-transparent text-light border-secondary mt-2">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f2">¿Puedo cambiar una talla?</button>
+    </h2>
+    <div id="f2" class="accordion-collapse collapse" data-bs-parent="#faq">
+      <div class="accordion-body">Sí, dentro de 15 días y con etiquetas. Consulta “Cambios y devoluciones”.</div>
+    </div>
+  </div>
+  <div class="accordion-item bg-transparent text-light border-secondary mt-2">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f3">¿Qué métodos de pago aceptan?</button>
+    </h2>
+    <div id="f3" class="accordion-collapse collapse" data-bs-parent="#faq">
+      <div class="accordion-body">Tarjeta (Visa/Mastercard/AMEX), PayPal, Mercado Pago y pago en OXXO.</div>
+    </div>
+  </div>
+</div>
+{% endblock %}

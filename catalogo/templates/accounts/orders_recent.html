@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title_tag %}Pedidos recientes{% endblock %}
+
+{% block extra_css %}
+<style>
+  .acct-card{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);border-radius:20px}
+  .empty{
+    border:1px dashed rgba(255,255,255,.25);
+    border-radius:16px; padding:28px; text-align:center;
+    background:rgba(255,255,255,.03)
+  }
+  .empty i{font-size:48px; color:#fff; opacity:.9}
+  .order-card{
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.03);
+    border-radius:16px; padding:16px;
+  }
+  .badge-soft{
+    border:1px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.08);
+    color:#e8eef7; font-weight:700;
+  }
+  table thead th{color:#dfe8f3; border-color:rgba(255,255,255,.12)}
+  table tbody td{color:#e8eef7; border-color:rgba(255,255,255,.06)}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container px-0">
+
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h1 class="section-title h4 m-0">Pedidos recientes</h1>
+      <div class="d-flex gap-2">
+        <a href="{% url 'cuenta_panel' %}" class="btn btn-outline-light btn-sm">Volver a mi cuenta</a>
+        <a href="{% url 'producto_lista' %}" class="btn btn-primary btn-sm">Explorar productos</a>
+      </div>
+    </div>
+
+    {% if messages %}
+      <div class="mb-3">
+        {% for m in messages %}
+          <div class="alert alert-{{ m.tags|default:'info' }} py-2 mb-2">{{ m }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if orders %}
+      <!-- Lista de pedidos -->
+      <div class="order-card mb-3">
+        <div class="table-responsive">
+          <table class="table align-middle m-0">
+            <thead>
+              <tr>
+                <th># Pedido</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th class="text-end">Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for o in orders %}
+                <tr>
+                  <td class="fw-bold">{{ o.id }}</td>
+                  <td>{{ o.fecha|date:"d/M/Y H:i" }}</td>
+                  <td>
+                    <span class="badge badge-soft">{{ o.estado }}</span>
+                  </td>
+                  <td class="text-end">${{ o.total }}</td>
+                  <td class="text-end">
+                    <a href="#" class="btn btn-sm btn-outline-light">Ver detalle</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    {% else %}
+      <!-- Estado vacío -->
+      <div class="empty">
+        <div class="mb-2"><i class="bi bi-box"></i></div>
+        <h5 class="mb-1">Aún no tienes pedidos</h5>
+        <p class="text-white-50 mb-3">Cuando compres, verás aquí tu historial y podrás rastrear tus envíos.</p>
+        <a href="{% url 'producto_lista' %}" class="btn btn-success fw-bold">Empezar a comprar</a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

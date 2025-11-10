@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title_tag %}{{ title|default:"Información" }}{% endblock %}
+{% block content %}
+  <div class="container py-4">
+    <h1 class="mb-3">{{ title }}</h1>
+    <div class="lead text-white-50">{{ subtitle }}</div>
+    <hr class="my-4">
+    <div class="prose">
+      {% block page_body %}
+        <p>Contenido próximamente.</p>
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}

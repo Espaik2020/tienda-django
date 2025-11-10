@@ -1,0 +1,296 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Inicio - Tienda de Ropa Gamer{% endblock %}
+
+{# CSS móvil solo para este template #}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/mobile-home.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{# Preload del fondo del hero desktop #}
+{% static 'img/hero-gamer.png' as HERO_BG %}
+<link rel="preload" as="image" href="{{ HERO_BG }}">
+
+{# ====== ENCABEZADO + BUSCADOR + CHIPS (SOLO MÓVIL) ====== #}
+<header class="m-header only-mobile" aria-label="Barra superior">
+  <button class="m-icon-btn" aria-label="Menú"><span class="mi mi-menu"></span></button>
+  <a href="{% url 'inicio' %}" class="m-logo">DNM<br>WEAR</a>
+  <a href="{% url 'carrito_detalle' %}" class="m-icon-btn" aria-label="Carrito"><span class="mi mi-cart"></span></a>
+</header>
+
+<form action="{% url 'producto_lista' %}" class="m-search only-mobile" role="search">
+  <input name="q" type="search" placeholder="Buscar..." aria-label="Buscar productos">
+  <button type="submit" aria-label="Buscar"><span class="mi mi-search"></span></button>
+</form>
+
+<nav class="m-chips only-mobile" aria-label="Categorías rápidas">
+  <a href="{% url 'producto_lista' %}?cat=playeras" class="chip">Playeras</a>
+  <a href="{% url 'producto_lista' %}?cat=hoodies" class="chip">Hoodies</a>
+  <a href="{% url 'producto_lista' %}?cat=calzado" class="chip">Calzado</a>
+  <a href="{% url 'producto_lista' %}" class="chip chip--ghost">Todo</a>
+</nav>
+
+
+{# ====== HERO PRINCIPAL (teléfono y desktop) ====== #}
+{% static 'img/hero-gamer.png' as HERO_BG %}
+
+<section class="hero-wrap mb-4" data-aos="zoom-in" data-aos-duration="800">
+  <img src="{{ HERO_BG }}" alt="" class="hero-bg" loading="eager" decoding="async">
+
+  <div class="hero-content">
+    <span class="hero-kicker mb-2">Colección Gamer • FW 2025</span>
+    <h1 class="hero-title">Moda gamer <br>para jugar en serio</h1>
+    <p class="lead mb-4" style="opacity:.95">
+      Playeras, hoodies y <strong>calzado</strong> inspirados en tus mundos favoritos.
+    </p>
+    <div class="d-flex flex-wrap gap-2 justify-content-center mb-3">
+      <a class="btn btn-outline-light btn-sm rounded-pill" href="{% url 'producto_lista' %}?cat=playeras">Playeras</a>
+      <a class="btn btn-outline-light btn-sm rounded-pill" href="{% url 'producto_lista' %}?cat=hoodies">Hoodies</a>
+      <a class="btn btn-outline-light btn-sm rounded-pill" href="{% url 'producto_lista' %}?cat=calzado">Calzado</a>
+      <a class="btn btn-outline-light btn-sm rounded-pill" href="{% url 'producto_lista' %}">Todo</a>
+    </div>
+    <a class="btn btn-neon btn-lg btn-float" href="{% url 'producto_lista' %}">Ver productos</a>
+  </div>
+</section>
+
+{# ====== DESTACADOS ====== #}
+<section class="section" data-aos="fade-up" data-aos-duration="700">
+  <div class="d-flex align-items-center justify-content-between mb-2">
+    <h2 class="section-title h4 m-0">Destacados</h2>
+    <a href="{% url 'producto_lista' %}" class="btn btn-sm btn-outline-light">Ver todo</a>
+  </div>
+
+  <div class="showcase">
+    <div class="showcase-track is-auto">
+      {% if destacados %}
+        {% for _ in "12" %}
+          {% for p in destacados %}
+            <a class="showcase-card tilt" href="{{ p.get_absolute_url }}">
+              <span class="shine"></span>
+              {% if p.portada_url %}
+                <img loading="lazy" src="{{ p.portada_url }}" alt="{{ p.nombre }}">
+              {% elif p.imagen %}
+                <img loading="lazy" src="{{ p.imagen.url }}" alt="{{ p.nombre }}">
+              {% else %}
+                <img loading="lazy" src="https://images.unsplash.com/photo-1542060748-10c28b62716b?q=80&w=1600&auto=format&fit=crop" alt="{{ p.nombre }}">
+              {% endif %}
+              {% if p.marca %}<span class="showcase-badge">{{ p.marca.nombre }}</span>{% endif %}
+              <div class="showcase-title">
+                {{ p.nombre }}
+                {% if p.descuento and p.descuento|floatformat != "0" %} · -{{ p.descuento|floatformat:0 }}%{% endif %}
+              </div>
+            </a>
+          {% endfor %}
+        {% endfor %}
+      {% else %}
+        {% for _ in "12" %}
+          <a class="showcase-card tilt" href="{% url 'producto_lista' %}">
+            <span class="shine"></span>
+            <img loading="lazy" src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1600&auto=format&fit=crop" alt="Colección">
+            <span class="showcase-badge">New</span>
+            <div class="showcase-title">Explora la colección</div>
+          </a>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{# ====== MARQUESINA TEMÁTICAS ====== #}
+<section class="section" data-aos="fade-up" data-aos-duration="700">
+  <div class="marquee">
+    <div class="marquee-inner">
+      {% if tematicas %}
+        {% for _ in "12" %}
+          {% for t in tematicas %}
+            <a class="marquee-item text-decoration-none" href="{% url 'tematica_detalle' t.slug %}">
+              {% if t.icono %}
+                <img src="{{ t.icono.url }}" alt="{{ t.nombre }}" style="height:20px;width:20px;border-radius:50%;object-fit:cover;">
+              {% endif %}
+              {{ t.nombre }}
+            </a>
+          {% endfor %}
+        {% endfor %}
+      {% else %}
+        <span class="marquee-item">👾 Estilos prontos…</span>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{# ====== MINI HERO CALZADO (solo desktop para no duplicar en móvil) ====== #}
+<section class="section only-desktop" data-aos="zoom-in" data-aos-duration="700">
+  <div class="hero-wrap" style="
+      min-height: 40vh;
+      background-image: url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1600&auto=format&fit=crop');
+  ">
+    <div class="hero-content">
+      <span class="hero-kicker mb-2">New Drop</span>
+      <h2 class="hero-title" style="font-size: clamp(1.8rem, 4vw, 2.6rem);">Calzado Gamer</h2>
+      <p class="mb-3">Sneakers con detalles pixel, neón y glow.</p>
+      <a href="{% url 'producto_lista' %}?cat=calzado" class="btn btn-neon btn-float">Ver calzado</a>
+    </div>
+  </div>
+</section>
+
+{# ====== CATEGORÍAS ====== #}
+<section class="section" data-aos="fade-up" data-aos-duration="700">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 class="section-title h4 m-0">Categorías</h2>
+    <a href="{% url 'producto_lista' %}" class="btn btn-outline-primary btn-sm">Ver todo</a>
+  </div>
+
+  <div class="row g-3 cat-grid">
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="{% url 'producto_lista' %}?cat=playeras" class="text-decoration-none text-light">
+        <div class="card tilt h-100" data-aos="fade-up" data-aos-delay="0">
+          <span class="shine"></span>
+          <img loading="lazy" class="card-img-top"
+               src="https://images.unsplash.com/photo-1484515991647-c5760fcecfc7?q=80&w=1200&auto=format&fit=crop"
+               alt="Playeras">
+          <div class="card-body"><h6 class="m-0 fw-bold">Playeras</h6></div>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="{% url 'producto_lista' %}?cat=hoodies" class="text-decoration-none text-light">
+        <div class="card tilt h-100" data-aos="fade-up" data-aos-delay="100">
+          <span class="shine"></span>
+          <img loading="lazy" class="card-img-top"
+               src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1200&auto=format&fit=crop"
+               alt="Hoodies">
+          <div class="card-body"><h6 class="m-0 fw-bold">Hoodies</h6></div>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="{% url 'producto_lista' %}?cat=pantalones" class="text-decoration-none text-light">
+        <div class="card tilt h-100" data-aos="fade-up" data-aos-delay="200">
+          <span class="shine"></span>
+          <img loading="lazy" class="card-img-top"
+               src="https://images.unsplash.com/photo-1583496661160-cf9a8c2a7d7d?q=80&w=1200&auto=format&fit=crop"
+               alt="Pantalones">
+          <div class="card-body"><h6 class="m-0 fw-bold">Pantalones</h6></div>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="{% url 'producto_lista' %}?cat=calzado" class="text-decoration-none text-light">
+        <div class="card tilt h-100" data-aos="fade-up" data-aos-delay="300">
+          <span class="shine"></span>
+          <img loading="lazy" class="card-img-top"
+               src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop"
+               alt="Calzado">
+          <div class="card-body"><h6 class="m-0 fw-bold">Calzado</h6></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+{# ====== Nuestras marcas ====== #}
+<section class="section" data-aos="fade-up" data-aos-duration="700" aria-label="Nuestras marcas">
+  <div class="brands-head">
+    <h2 class="section-title h5 m-0">Nuestras marcas</h2>
+    <a class="btn btn-sm btn-outline-light" href="{% url 'marcas_lista' %}">Ver todas</a>
+  </div>
+
+  <div class="brand-lane brand-lane--xl brand-lane--circles">
+    <div class="brand-track">
+      {% if marcas_menu %}
+        {% for m in marcas_menu %}
+          <a class="brand-card" data-brand="{{ m.nombre|slugify }}" href="{{ m.get_absolute_url }}" title="{{ m.nombre }}">
+            {% if m.logo %}
+              <img src="{{ m.logo.url }}" alt="{{ m.nombre }}">
+            {% else %}
+              <span class="txt">{{ m.nombre }}</span>
+            {% endif %}
+          </a>
+        {% endfor %}
+        {% for m in marcas_menu %}
+          <a class="brand-card" data-brand="{{ m.nombre|slugify }}" href="{{ m.get_absolute_url }}" title="{{ m.nombre }}">
+            {% if m.logo %}
+              <img src="{{ m.logo.url }}" alt="{{ m.nombre }}">
+            {% else %}
+              <span class="txt">{{ m.nombre }}</span>
+            {% endif %}
+          </a>
+        {% endfor %}
+      {% else %}
+        <a class="brand-card" data-brand="nintendo" href="{% url 'producto_lista' %}?marca=nintendo" title="Nintendo">
+          <img src="{% static 'img/marcas/nintendo.svg' %}" alt="Nintendo">
+        </a>
+        <a class="brand-card" data-brand="playstation" href="{% url 'producto_lista' %}?marca=playstation" title="PlayStation">
+          <img src="{% static 'img/marcas/playstation.svg' %}" alt="PlayStation">
+        </a>
+        <a class="brand-card" data-brand="xbox" href="{% url 'producto_lista' %}?marca=xbox" title="Xbox">
+          <img src="{% static 'img/marcas/xbox.svg' %}" alt="Xbox">
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{# ====== Newsletter ====== #}
+<section id="newsletter" class="newsletter my-5" data-aos="fade-up" data-aos-duration="700">
+  <div class="container px-0">
+    <div class="newsletter-card overflow-hidden rounded-4 shadow-sm border border-1 border-opacity-25">
+      <div class="row g-0 align-items-stretch">
+        <div class="col-12 col-lg-7"><div class="newsletter-hero h-100"></div></div>
+        <div class="col-12 col-lg-5">
+          <div class="p-4 p-lg-5 bg-body-tertiary bg-opacity-10 h-100 d-flex flex-column justify-content-center">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="menu-section" data-text="Suscríbete">Suscríbete</div>
+            </div>
+            <p class="text-white-50 mb-3">¿Quieres recibir ofertas y novedades? Obtén <strong>10% de descuento</strong> en tu primera compra.</p>
+            <form method="post" action="{% url 'newsletter_subscribe' %}" class="newsletter-form">
+              {% csrf_token %}
+              <div class="mb-2">
+                <label for="newsletterEmail" class="visually-hidden">Email</label>
+                <input id="newsletterEmail" type="email" name="email" class="form-control form-control-lg" placeholder="Escribe tu email" required>
+              </div>
+              <div class="small text-white-50 mb-3">Revisa tu bandeja de entrada para confirmar tu suscripción.</div>
+              <button type="submit" class="btn btn-neon btn-lg w-100">Suscribirme</button>
+            </form>
+            {% if messages %}
+              <div class="mt-3">
+                {% for m in messages %}
+                  <div class="alert alert-{{ m.tags|default:'info' }} py-2 mb-2">{{ m }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ===== TABBAR (solo teléfono) ===== #}
+<nav class="m-tabbar only-mobile" aria-label="Navegación inferior">
+  <a href="{% url 'inicio' %}" class="tab is-active">
+    <span class="mi mi-home"></span><span>Inicio</span>
+  </a>
+  <a href="{% url 'producto_lista' %}" class="tab">
+    <span class="mi mi-bag"></span><span>Productos</span>
+  </a>
+  <a href="{% url 'marcas_lista' %}" class="tab">
+    <span class="mi mi-tag"></span><span>Marcas</span>
+  </a>
+  {% if user.is_authenticated %}
+    <a href="{% url 'producto_lista' %}" class="tab">
+      <span class="mi mi-user"></span><span>Cuenta</span>
+    </a>
+  {% else %}
+    <a href="{% url 'login' %}" class="tab">
+      <span class="mi mi-user"></span><span>Cuenta</span>
+    </a>
+  {% endif %}
+</nav>
+
+{% endblock %}

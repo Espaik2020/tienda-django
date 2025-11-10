@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title_tag %}Direcciones de envío{% endblock %}
+
+{% block extra_css %}
+<style>
+  .acct-card{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);border-radius:20px}
+  .addr-label{font-weight:700;text-transform:uppercase;font-size:.75rem;letter-spacing:.06em;opacity:.85}
+  .addr-help{color:#a9b8cc}
+  .addr-pill{border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08); color:#e8eef7; border-radius:999px; padding:4px 10px; font-weight:700}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container px-0">
+
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h1 class="section-title h4 m-0">
+        <i class="bi bi-geo-alt me-2"></i>Direcciones de envío
+      </h1>
+      <div class="d-flex gap-2">
+        <a href="{% url 'cuenta_panel' %}" class="btn btn-outline-light btn-sm">Volver a mi cuenta</a>
+        <a href="{% url 'producto_lista' %}" class="btn btn-primary btn-sm">Explorar productos</a>
+      </div>
+    </div>
+
+    {% if messages %}
+      <div class="mb-3">
+        {% for m in messages %}
+          <div class="alert alert-{{ m.tags|default:'info' }} py-2 mb-2">{{ m }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="row g-4">
+      <!-- Resumen actual -->
+      <div class="col-12 col-lg-5">
+        <div class="p-4 acct-card h-100">
+          <div class="d-flex align-items-center mb-3">
+            <i class="bi bi-pin-map-fill me-2"></i>
+            <span class="addr-pill">Dirección principal</span>
+          </div>
+
+          <div class="mb-2 fw-bold">{{ profile.name_for_display|default:request.user.username }}</div>
+          <div class="mb-1">{{ profile.street|default:"(Calle no definida)" }}</div>
+          <div class="mb-1">
+            {% if profile.district %}{{ profile.district }}, {% endif %}
+            {% if profile.city %}{{ profile.city }}{% else %}(Ciudad no definida){% endif %}
+          </div>
+          <div class="mb-1">
+            {% if profile.state %}{{ profile.state }}{% else %}(Estado no definido){% endif %}
+            {% if profile.zipcode %} · CP {{ profile.zipcode }}{% endif %}
+          </div>
+          <div class="mb-1 addr-help">
+            <i class="bi bi-telephone me-1"></i>
+            {% if profile.phone %}{{ profile.phone }}{% else %}(Teléfono no definido){% endif %}
+          </div>
+
+          <div class="addr-help mt-3">
+            Esta dirección se usará por defecto en tus pedidos.
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario edición -->
+      <div class="col-12 col-lg-7">
+        <div class="p-4 acct-card h-100">
+          <form method="post" class="row g-3">
+            {% csrf_token %}
+
+            <div class="col-12 col-md-6">
+              <label class="form-label addr-label">Teléfono</label>
+              {{ form.phone }}
+            </div>
+
+            <div class="col-12">
+              <label class="form-label addr-label">Calle</label>
+              {{ form.street }}
+            </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label addr-label">Colonia</label>
+              {{ form.district }}
+            </div>
+
+            <div class="col-6 col-md-4">
+              <label class="form-label addr-label">Ciudad</label>
+              {{ form.city }}
+            </div>
+
+            <div class="col-6 col-md-4">
+              <label class="form-label addr-label">Estado</label>
+              {{ form.state }}
+            </div>
+
+            <div class="col-6 col-md-4">
+              <label class="form-label addr-label">CP</label>
+              {{ form.zipcode }}
+            </div>
+
+            {% if form.non_field_errors %}
+              <div class="col-12">
+                {% for e in form.non_field_errors %}
+                  <div class="alert alert-danger py-2">{{ e }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <div class="col-12 d-flex gap-2">
+              <button class="btn btn-success fw-bold" type="submit">Guardar dirección</button>
+              <a href="{% url 'cuenta_panel' %}" class="btn btn-outline-light">Cancelar</a>
+            </div>
+
+            <div class="form-text addr-help">
+              *Por ahora manejamos una sola dirección principal (puedes cambiarla aquí).
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

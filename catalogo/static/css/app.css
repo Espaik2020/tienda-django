@@ -1,0 +1,856 @@
+/* ===== Hero ===== */
+.hero-wrap {
+  position: relative;
+  min-height: 70vh;
+  border-radius: 22px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  padding: clamp(2rem, 5vw, 4rem);
+  background-size: cover;           /* fallback si algún día usas background-image */
+  background-position: center;      /* fallback */
+  box-shadow: 0 20px 50px rgba(0,0,0,.12);
+  transform: translateZ(0);
+}
+
+/* Capa de degradado para legibilidad del texto */
+.hero-wrap::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.35));
+}
+
+/* Contenido del hero */
+.hero-content {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  text-align: center;
+}
+
+.hero-kicker {
+  display: inline-block;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.15);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.hero-title {
+  font-weight: 800;
+  line-height: 1.05;
+  margin: .6rem 0 1rem;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  text-shadow: 0 8px 24px rgba(0,0,0,.35);
+}
+
+/* Botón “flotando” suave */
+.btn-float {
+  transform: translateY(0);
+  transition: transform .25s ease, box-shadow .25s ease;
+  box-shadow: 0 10px 30px rgba(13,110,253,.35);
+}
+.btn-float:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(13,110,253,.45);
+}
+
+/* ===== Tarjetas de categorías ===== */
+.cat-grid .card {
+  border: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0,0,0,.06);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.cat-grid .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 38px rgba(0,0,0,.10);
+}
+.cat-grid .card-img-top {
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+.cat-grid .badge {
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(6px);
+}
+
+/* separadores suaves */
+.section { margin-top: clamp(2rem, 5vw, 3.5rem); }
+
+/* ======= THEME GAMER ======= */
+:root{
+  --brand: #0d6efd;
+  --neon: #64ffda;
+  --bg-1: #0b1020;
+  --bg-2: #151c36;
+  --txt: #e6f1ff;
+}
+
+body{
+  background:
+    radial-gradient(1200px 800px at 10% -10%, #1e2650 0%, transparent 60%),
+    radial-gradient(1000px 700px at 110% 10%, #0f1a3a 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  color: var(--txt);
+  font-family: "Outfit", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+/* Títulos retro para destacar */
+.hero-title, .section-title{
+  font-family: "Press Start 2P", monospace;
+  letter-spacing: .5px;
+  text-shadow: 0 10px 30px rgba(0,0,0,.5);
+}
+
+/* Botón neón */
+.btn-neon{
+  color: #06141d;
+  background: var(--neon);
+  box-shadow: 0 0 0 rgba(100,255,218,.3);
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+.btn-neon:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(100,255,218,.35), 0 0 16px rgba(100,255,218,.4) inset;
+  filter: saturate(1.1);
+}
+
+/* Navbar: que los links contrasten en tema oscuro */
+.navbar-dark .nav-link{ color:#dfe7ff; }
+.navbar-dark .nav-link:hover{ color:#fff; }
+
+/* ======= SLIDER HORIZONTAL (auto-scroll con pausa) ======= */
+.showcase{
+  overflow: hidden;
+  border-radius: 18px;
+  position: relative;
+  background: rgba(255,255,255,.04);
+  box-shadow: 0 20px 60px rgba(0,0,0,.25) inset, 0 10px 30px rgba(0,0,0,.2);
+}
+.showcase-track{
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 80%;
+  gap: 16px;
+  padding: 14px;
+  animation: track-scroll 28s linear infinite;
+  will-change: transform;
+}
+.showcase:hover .showcase-track{ animation-play-state: paused; }
+@media (min-width:768px){ .showcase-track{ grid-auto-columns: 40%; } }
+@media (min-width:1200px){ .showcase-track{ grid-auto-columns: 28%; } }
+
+.showcase-card{
+  position: relative;
+  height: 260px;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transform: translateZ(0);
+  box-shadow: 0 12px 28px rgba(0,0,0,.35);
+}
+.showcase-card img{
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .6s ease;
+  filter: contrast(1.05) saturate(1.05);
+}
+.showcase-card:hover img{ transform: scale(1.06); }
+.showcase-badge{
+  position: absolute; left: 12px; top: 12px;
+  background: rgba(0,0,0,.55);
+  color: #fff; font-weight: 700; font-size: .8rem;
+  padding: 6px 10px; border-radius: 999px; backdrop-filter: blur(6px);
+}
+.showcase-title{
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 14px 16px;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0, rgba(0,0,0,.65) 100%);
+  color: #fff; font-weight: 700;
+}
+@keyframes track-scroll{ from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ======= CARDS PARALLAX (tilt) ======= */
+/* Tilt solo porta variables del JS; el transform final va en .product-card */
+.tilt{
+  transform-style: preserve-3d;
+  transition: transform .12s ease, box-shadow .2s ease;
+  will-change: transform;
+}
+.tilt:hover{ box-shadow: 0 20px 60px rgba(0,0,0,.30); }
+.tilt .shine{
+  position:absolute; inset:0; pointer-events:none;
+  background: radial-gradient(300px 300px at var(--mx,50%) var(--my,50%), rgba(255,255,255,.24), transparent 60%);
+  opacity: .0; transition: opacity .2s ease;
+}
+.tilt:hover .shine{ opacity: .9; }
+
+/* ======= MARQUESINA DE MARCAS ======= */
+.marquee{
+  overflow:hidden; white-space:nowrap; border-radius: 16px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.06);
+}
+.marquee-inner{
+  display:inline-block; padding: 12px 0; animation: marquee 16s linear infinite;
+}
+.marquee:hover .marquee-inner{ animation-play-state: paused; }
+.marquee-item{
+  display:inline-flex; align-items:center; gap:10px;
+  color:#c8d6ff; opacity:.85; margin: 0 24px; font-weight:600;
+}
+@keyframes marquee{ 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* Pequeños retoques */
+.section{ margin-top: clamp(2rem, 5vw, 3.5rem); }
+.card, .showcase, .marquee{ backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.card-img-top { height: 220px; object-fit: cover; }
+
+/* ====== PRODUCTO DETALLE — Galería ====== */
+.product-gallery .img-main{
+  width: 100%;
+  max-height: 520px;
+  object-fit: contain;
+  background: #0b0f1f;
+  border-radius: 10px;
+  display: block;
+}
+.product-gallery-thumbs{
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: .5rem;
+}
+.product-gallery-thumbs .thumb{
+  width: 72px; height: 72px; object-fit: cover; border-radius: 8px; cursor: pointer;
+  opacity: .85; border: 2px solid transparent; background: #0e1530;
+  transition: opacity .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+}
+.product-gallery-thumbs .thumb:hover,
+.product-gallery-thumbs .thumb.active{
+  opacity: 1; border-color: var(--brand, #0d6efd);
+  box-shadow: 0 0 0 2px rgba(13,110,253,.20);
+}
+.product-gallery-thumbs .thumb:active{ transform: scale(.98); }
+
+/* Modal de zoom en tema oscuro */
+.modal-content.bg-dark{ background: #0b1020; }
+#zoomImg{ max-height: 80vh; object-fit: contain; }
+@media (max-width: 767.98px){ .product-gallery .img-main{ max-height: 380px; } }
+
+/* ===== Offcanvas lateral gamer (menú 3 rayas) ===== */
+.offcanvas-gamer{
+  width: 320px;
+  background:
+    radial-gradient(800px 600px at 120% -20%, #1e2650 0%, transparent 60%),
+    linear-gradient(180deg, #0b1020, #151c36);
+  border-right: 1px solid rgba(255,255,255,.06);
+  box-shadow: 0 10px 40px rgba(0,0,0,.5);
+  color: #e6f1ff;
+}
+.offcanvas-gamer .offcanvas-header{ border-bottom: 1px solid rgba(255,255,255,.06); }
+.offcanvas-gamer .offcanvas-title{
+  font-family: "Press Start 2P", monospace; letter-spacing: .5px;
+}
+.offcanvas-gamer .list-group-item.menu-link{
+  background: transparent; color: #e6f1ff; border-color: rgba(255,255,255,.06);
+}
+.offcanvas-gamer .list-group-item.menu-link:hover{ background: rgba(255,255,255,.06); }
+.offcanvas-gamer .btn{ border-radius: 14px; }
+
+/* Opcional: suaviza el icono de la hamburguesa */
+.navbar-toggler{ outline: none !important; box-shadow: none !important; }
+
+/* === Navbar: logo centrado (móvil + desktop) === */
+.navbar{ position: relative; }
+.navbar .navbar-center-brand{
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  z-index: 1029; pointer-events: auto;
+}
+.navbar .navbar-center-brand .brand-logo{
+  display: block; height: auto; max-height: 48px; max-width: 180px;
+  width: auto; object-fit: contain;
+  filter: drop-shadow(0 1px 6px rgba(0,0,0,.25));
+}
+@media (min-width: 1200px){
+  .navbar .navbar-center-brand .brand-logo{ max-height: 56px; max-width: 220px; }
+}
+@media (max-width: 991.98px){
+  .navbar .navbar-center-brand .brand-logo{ max-height: 28px; max-width: 140px; }
+}
+
+/* Títulos de sección con relleno multicolor animado (fix de especificidad) */
+.menu-section{
+  position: relative;
+  text-transform: uppercase;
+  font-size: .85rem;
+  letter-spacing: .08em;
+  font-weight: 700;
+  margin-bottom: .5rem;
+  opacity: .95;
+
+  background: linear-gradient(90deg,
+              #ff5f6d 0%,
+              #ffc371 20%,
+              #65ffe1 40%,
+              #7aa2ff 60%,
+              #e07bff 80%,
+              #ff5f6d 100%);
+  background-size: 300% 100%;
+  animation: menuShine 6s linear infinite, hueCycle 12s linear infinite;
+
+  display: inline-block;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  filter: saturate(120%);
+}
+.menu-section::after{
+  content: attr(data-text);
+  position: absolute; inset: 0; z-index: -1; color: transparent;
+  text-shadow: 0 0 1px rgba(255,255,255,.28), 0 0 6px rgba(101,255,225,.18);
+  pointer-events: none;
+}
+@keyframes menuShine{ 0%{background-position:0% center} 100%{background-position:300% center} }
+@keyframes hueCycle{ 0%{filter:hue-rotate(0deg) saturate(120%)} 100%{filter:hue-rotate(360deg) saturate(120%)} }
+.menu-section:hover{ animation-duration: 4s, 10s; }
+@media (prefers-reduced-motion: reduce){ .menu-section{ animation: none; } }
+
+/* ===== Tarjetas de producto — Lift + Tilt + Pop (3D) ===== */
+.card.product-card{
+  position: relative;
+  border: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(0,0,0,.10);
+
+  /* LIFT vars */
+  --lift-ty: 0px;
+  --lift-scale: 1;
+
+  /* POP (profundidad) */
+  --lift-z: 0px;
+
+  /* TILT vars llegan del JS (.tilt): --rx, --ry (con fallback) */
+  transform: perspective(900px)
+             translateZ(var(--lift-z))
+             rotateX(var(--rx, 0deg))
+             rotateY(var(--ry, 0deg))
+             translateY(var(--lift-ty))
+             scale(var(--lift-scale));
+
+  transform-style: preserve-3d;
+  transition:
+    transform .25s cubic-bezier(.18,.89,.32,1.28),
+    box-shadow .25s ease,
+    filter .25s ease;
+  will-change: transform, box-shadow;
+}
+.card.product-card:hover,
+.card.product-card:focus-within{
+  --lift-ty: -10px;
+  --lift-scale: 1.01;
+  --lift-z: 36px;            /* 24–48px según gusto */
+  z-index: 3;
+  box-shadow: 0 26px 70px rgba(0,0,0,.28);
+}
+
+/* Brillo interior sutil */
+.card.product-card::after{
+  content:"";
+  position:absolute; inset:0; pointer-events:none;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), 0 16px 40px rgba(101,255,225,.12);
+  opacity:0; transition:opacity .25s ease;
+}
+.card.product-card:hover::after{ opacity:.9; }
+
+/* Imagen con zoom suave */
+.card.product-card .card-img-top{
+  transition: transform .45s ease;
+  will-change: transform;
+}
+.card.product-card:hover .card-img-top{ transform: scale(1.05); }
+
+/* Accesibilidad */
+@media (prefers-reduced-motion: reduce){
+  .card.product-card,
+  .card.product-card:hover{
+    --lift-ty: 0;
+    --lift-scale: 1;
+    --lift-z: 0;
+    transition: box-shadow .2s ease;
+  }
+}
+
+/* Móvil: menos “pop” para que no salte tanto */
+@media (max-width: 575.98px){
+  .card.product-card:hover,
+  .card.product-card:focus-within{ --lift-z: 24px; }
+}
+
+/* === La grilla aporta la perspectiva 3D (clave para "salir hacia el frente") === */
+.product-grid{
+  perspective: 900px;                 /* prueba 800–1200px según gusto */
+  perspective-origin: 50% 35%;        /* de dónde “mira” la cámara */
+}
+
+/* Asegura que nada recorte la tarjeta cuando “sale” */
+.product-grid > [class*="col-"]{
+  overflow: visible;
+}
+
+/* Composición final de la tarjeta: POP + TILT + LIFT */
+.card.product-card{
+  /* reafirma valores por defecto */
+  --lift-ty: 0px;
+  --lift-scale: 1;
+  --lift-z: 0px;
+
+  transform: translateZ(var(--lift-z)) /* POP real gracias a .product-grid */
+             rotateX(var(--rx, 0deg))
+             rotateY(var(--ry, 0deg))
+             translateY(var(--lift-ty))
+             scale(var(--lift-scale));
+  transform-style: preserve-3d;
+  transition:
+    transform .25s cubic-bezier(.18,.89,.32,1.28),
+    box-shadow .25s ease,
+    filter .25s ease;
+  will-change: transform, box-shadow;
+}
+
+/* Hover: más profundidad para que sí “salte” hacia el frente */
+.card.product-card:hover,
+.card.product-card:focus-within{
+  --lift-ty: -10px;
+  --lift-scale: 1.02;                  /* un poco más de escala */
+  --lift-z: 64px;                      /* súbelo a 80–120px si quieres más POP */
+  z-index: 5;
+  box-shadow: 0 35px 90px rgba(0,0,0,.35);
+}
+
+/* En móvil, modera el efecto */
+@media (max-width: 575.98px){
+  .card.product-card:hover,
+  .card.product-card:focus-within{
+    --lift-z: 32px;
+    --lift-scale: 1.01;
+  }
+}
+
+/* ======== Fondo del HERO como <img class="hero-bg"> ======== */
+.hero-bg{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: 50% 35%;
+  z-index: 0;
+  pointer-events: none;                     /* no intercepta clics */
+  filter: saturate(110%) contrast(105%);
+}
+/* Orden de capas: fondo < overlay < contenido */
+.hero-wrap::before{ z-index: 1; }
+.hero-content{ position: relative; z-index: 2; }
+
+/* === Animación de marcas en el menú Compañías === */
+.dropdown-menu .dropdown-item.brand-anim{
+  display:flex; align-items:center; gap:.60rem;
+  font-weight:600;
+}
+
+.dropdown-menu .dropdown-item.brand-anim .dot{
+  width:10px; height:10px; border-radius:50%;
+  background: var(--brand-color, #fff);
+  box-shadow: 0 0 0 0 rgba(0,0,0,0);
+  transition: box-shadow .25s ease;
+}
+
+.dropdown-menu .dropdown-item.brand-anim .label{
+  /* Gradiente animable que “barre” el texto */
+  background: linear-gradient(90deg, #fff, var(--brand-color, #fff), #fff);
+  background-size: 220% 100%;
+  background-position: 0% center;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: transform .15s ease;
+}
+
+/* PlayStation: azul -> cian -> azul */
+.dropdown-menu .dropdown-item.brand-ps .label{
+  background: linear-gradient(90deg, #fff, #0a66ff, #00c6ff, #fff);
+  background-size: 240% 100%;
+}
+
+/* Hover: activa el “barrido” de color y un glow en el puntito */
+.dropdown-menu .dropdown-item.brand-anim:hover .label,
+.dropdown-menu .dropdown-item.brand-anim:focus .label{
+  animation: brandSweep .9s ease forwards;
+}
+.dropdown-menu .dropdown-item.brand-anim:hover .dot,
+.dropdown-menu .dropdown-item.brand-anim:focus .dot{
+  box-shadow: 0 0 12px 4px color-mix(in srgb, var(--brand-color, #fff) 60%, transparent);
+}
+
+/* Colores de marca */
+.dropdown-menu .brand-nintendo{ --brand-color: #e60012; }  /* Nintendo rojo oficial */
+.dropdown-menu .brand-ps{       --brand-color: #0a66ff; }  /* Play azul principal  */
+.dropdown-menu .brand-xbox{     --brand-color: #107c10; }  /* Xbox verde           */
+
+@keyframes brandSweep{
+  0%{   background-position: 0% center; }
+  100%{ background-position: 100% center; }
+}
+
+/* ===== Offcanvas: carril "Nuestras marcas" ===== */
+.offcanvas-gamer .brand-lane{
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.offcanvas-gamer .brand-track{
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  padding: .6rem .7rem;
+  width: max-content;
+}
+
+/* Chips dentro del offcanvas (evita estilo de <a> azul/subrayado) */
+.offcanvas-gamer .brand-chip{
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding:.38rem .65rem;
+  border-radius:999px;
+  font-weight:700; line-height:1; white-space:nowrap;
+  background: rgba(255,255,255,.07);
+  color:#e6f1ff !important;           /* rompe el azul por defecto */
+  border:1px solid currentColor;
+  text-decoration:none !important;    /* quita subrayado */
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.offcanvas-gamer .brand-chip:hover,
+.offcanvas-gamer .brand-chip:focus-visible{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.12);
+  box-shadow: 0 0 0 3px color-mix(in oklab, currentColor 30%, transparent);
+}
+
+/* Colores por marca (texto/glow) */
+.offcanvas-gamer .brand-chip[data-brand="nintendo"]     { color:#e60012 !important; }
+.offcanvas-gamer .brand-chip[data-brand="playstation"]  { color:#0a66ff !important; }
+.offcanvas-gamer .brand-chip[data-brand="xbox"]         { color:#107c10 !important; }
+.offcanvas-gamer .brand-chip[data-brand="sega"]         { color:#00a3e0 !important; }
+.offcanvas-gamer .brand-chip[data-brand="capcom"]       { color:#ffd100 !important; }
+.offcanvas-gamer .brand-chip[data-brand="square-enix"]  { color:#e0e0e0 !important; }
+.offcanvas-gamer .brand-chip[data-brand="ubisoft"]      { color:#79c8ff !important; }
+.offcanvas-gamer .brand-chip[data-brand="ea"]           { color:#ff4747 !important; }
+.offcanvas-gamer .brand-chip[data-brand="rockstar"]     { color:#ffcc00 !important; }
+.offcanvas-gamer .brand-chip[data-brand="bandai-namco"] { color:#ff7a00 !important; }
+.offcanvas-gamer .brand-chip[data-brand="bethesda"]     { color:#bfbfbf !important; }
+.offcanvas-gamer .brand-chip[data-brand="blizzard"]     { color:#3aa9ff !important; }
+
+/* puntito (si lo usas) */
+.offcanvas-gamer .brand-dot{
+  width:6px; height:6px; border-radius:999px; background: currentColor;
+  box-shadow:0 0 10px currentColor;
+}
+
+/* ====== HOME: carril "Nuestras marcas" (logos a color y opacos) ====== */
+/* Quita el desaturado/opacity del logo y deja el blend normal */
+.brand-lane .brand-card{
+  --brand: #7aa2ff; /* fallback */
+  background: rgba(18, 24, 48, .55);
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .5rem .8rem;
+  text-decoration: none;
+  white-space: nowrap;
+  line-height: 1;
+  font-weight: 700;
+  color: #cfe3ff;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease, border-color .18s ease;
+}
+
+.brand-lane .brand-card img{
+  filter: none !important;           /* <- clave: sin escala de grises */
+  opacity: 1 !important;             /* <- clave: sin transparencia */
+  mix-blend-mode: normal !important; /* <- clave: sin “apagar” el logo */
+  display: block;
+  height: 28px;                      /* puedes subir a 32–36px si quieres */
+  width: auto;
+}
+
+.brand-lane .brand-card:hover{
+  transform: translateY(-2px);
+  background: rgba(22, 30, 60, .75);
+  color: #fff;
+  border-color: color-mix(in oklab, var(--brand, #7aa2ff) 55%, rgba(255,255,255,.16));
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--brand, #7aa2ff) 35%, transparent),
+    0 10px 28px -10px color-mix(in oklab, var(--brand, #7aa2ff) 60%, transparent);
+}
+
+/* Colores por marca para el “glow” (usa tu slug en data-brand) */
+.brand-lane .brand-card[data-brand="nintendo"]     { --brand:#e60012; }
+.brand-lane .brand-card[data-brand="playstation"]  { --brand:#0a66ff; }
+.brand-lane .brand-card[data-brand="xbox"]         { --brand:#107c10; }
+.brand-lane .brand-card[data-brand="sega"]         { --brand:#00a3e0; }
+.brand-lane .brand-card[data-brand="capcom"]       { --brand:#ffd100; }
+.brand-lane .brand-card[data-brand="square-enix"]  { --brand:#e0e0e0; }
+.brand-lane .brand-card[data-brand="ubisoft"]      { --brand:#79c8ff; }
+.brand-lane .brand-card[data-brand="ea"]           { --brand:#ff4747; }
+.brand-lane .brand-card[data-brand="rockstar"]     { --brand:#ffcc00; }
+.brand-lane .brand-card[data-brand="bandai-namco"] { --brand:#ff7a00; }
+.brand-lane .brand-card[data-brand="bethesda"]     { --brand:#bfbfbf; }
+.brand-lane .brand-card[data-brand="blizzard"]     { --brand:#3aa9ff; }
+
+/* ====== Carril de marcas — variante XL (para Home) ====== */
+.brand-lane--xl{
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+  border: 1px solid rgba(255,255,255,.16);
+}
+.brand-lane--xl .brand-track{
+  padding: 1.25rem 1.75rem;
+  gap: 2rem;
+  animation-duration: 32s; /* más lento para logos grandes */
+}
+.brands-head{
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  margin-bottom:.75rem;
+}
+
+/* Logos más grandes solo dentro de la variante XL */
+.brand-lane--xl .brand-card{ padding: .65rem 1rem; }
+.brand-lane--xl .brand-card img{ height: 40px; } /* sube a 44–48 si quieres aún más */
+
+/* ====== Newsletter (Home) ====== */
+.newsletter-card{
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border-color: rgba(255,255,255,.12) !important;
+}
+.newsletter-hero{
+  min-height: 260px;
+  background-size: cover;
+  background-position: center;
+  filter: saturate(105%);
+  position: relative;
+}
+.newsletter-hero::after{
+  content:"";
+  position:absolute; inset:0;
+  background: linear-gradient(0deg, rgba(0,0,0,.35), rgba(0,0,0,.15));
+  pointer-events:none;
+}
+@media (min-width: 992px){
+  .newsletter-hero{ min-height: 100%; }
+}
+/* Inputs en oscuro */
+.newsletter-form .form-control{
+  background-color: rgba(0,0,0,.25);
+  border-color: rgba(255,255,255,.18);
+  color: #e6f1ff;
+}
+.newsletter-form .form-control::placeholder{ color: rgba(230,241,255,.65); }
+.newsletter-form .form-control:focus{
+  border-color: #7aa2ff;
+  box-shadow: 0 0 0 .25rem color-mix(in oklab, #7aa2ff 25%, transparent);
+}
+
+/* === Marcas (círculos + nombre debajo) — CORREGIDO === */
+.brand-circles{
+  display:flex; gap:14px; padding:6px 4px 14px;
+  overflow-x:auto; -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.brand-circles::-webkit-scrollbar{ display:none; }
+
+.bc-item{
+  flex:0 0 auto;
+  width:92px;                 /* = diámetro del círculo */
+  text-align:center;
+  color:inherit; text-decoration:none;
+}
+
+.bc-circle{
+  width:92px; height:92px;
+  border-radius:50%;
+  display:grid; place-items:center;
+  background: rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
+  transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+
+  /* nuevo: para que el logo pueda “llenar” el círculo */
+  position: relative;
+  overflow: hidden;
+}
+
+.bc-item:hover .bc-circle{
+  transform: translateY(-2px);
+  background: rgba(255,255,255,.09);
+  box-shadow: 0 6px 16px -10px rgba(0,0,0,.45);
+}
+
+/* nuevo: el logo llena el círculo */
+.bc-circle img{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;          /* llena; si no quieres recorte usa contain + inset */
+  object-position: center;
+  border-radius: 50%;
+  display: block;
+  filter: drop-shadow(0 1px 6px rgba(0,0,0,.25));
+}
+
+.bc-initial{ font-weight:800; font-size:1.2rem; opacity:.9; }
+.bc-name{
+  display:block; margin-top:.45rem;
+  font-size:.9rem; font-weight:700;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+/* ====== HOME: carril "Nuestras marcas" (logos a color y opacos) ====== */
+/* Quita el desaturado/opacity del logo y deja el blend normal */
+.brand-lane .brand-card{
+  --brand: #7aa2ff; /* fallback */
+  background: rgba(18, 24, 48, .55);
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .5rem .8rem;
+  text-decoration: none;
+  white-space: nowrap;
+  line-height: 1;
+  font-weight: 700;
+  color: #cfe3ff;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease, border-color .18s ease;
+}
+
+/* IMPORTANTE: estas alturas NO deben aplicarse al modo círculos */
+.brand-lane:not(.brand-lane--circles) .brand-card img{
+  filter: none !important;           /* <- clave: sin escala de grises */
+  opacity: 1 !important;             /* <- clave: sin transparencia */
+  mix-blend-mode: normal !important; /* <- clave: sin “apagar” el logo */
+  display: block;
+  height: 28px;                      /* puedes subir a 32–36px si quieres */
+  width: auto;
+}
+
+.brand-lane .brand-card:hover{
+  transform: translateY(-2px);
+  background: rgba(22, 30, 60, .75);
+  color: #fff;
+  border-color: color-mix(in oklab, var(--brand, #7aa2ff) 55%, rgba(255,255,255,.16));
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--brand, #7aa2ff) 35%, transparent),
+    0 10px 28px -10px color-mix(in oklab, var(--brand, #7aa2ff) 60%, transparent);
+}
+
+/* Colores por marca para el “glow” (usa tu slug en data-brand) */
+.brand-lane .brand-card[data-brand="nintendo"]     { --brand:#e60012; }
+.brand-lane .brand-card[data-brand="playstation"]  { --brand:#0a66ff; }
+.brand-lane .brand-card[data-brand="xbox"]         { --brand:#107c10; }
+.brand-lane .brand-card[data-brand="sega"]         { --brand:#00a3e0; }
+.brand-lane .brand-card[data-brand="capcom"]       { --brand:#ffd100; }
+.brand-lane .brand-card[data-brand="square-enix"]  { --brand:#e0e0e0; }
+.brand-lane .brand-card[data-brand="ubisoft"]      { --brand:#79c8ff; }
+.brand-lane .brand-card[data-brand="ea"]           { --brand:#ff4747; }
+.brand-lane .brand-card[data-brand="rockstar"]     { --brand:#ffcc00; }
+.brand-lane .brand-card[data-brand="bandai-namco"] { --brand:#ff7a00; }
+.brand-lane .brand-card[data-brand="bethesda"]     { --brand:#bfbfbf; }
+.brand-lane .brand-card[data-brand="blizzard"]     { --brand:#3aa9ff; }
+
+/* ====== Carril de marcas — variante XL (para Home) ====== */
+.brand-lane--xl{
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+  border: 1px solid rgba(255,255,255,.16);
+}
+.brand-lane--xl .brand-track{
+  padding: 1.25rem 1.75rem;
+  gap: 2rem;
+  animation-duration: 32s; /* más lento para logos grandes */
+}
+.brands-head{
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  margin-bottom:.75rem;
+}
+
+/* Logos más grandes solo dentro de la variante XL, evitando círculos */
+.brand-lane--xl:not(.brand-lane--circles) .brand-card img{ height: 40px; } /* sube a 44–48 si quieres aún más */
+
+/* --- Solo para Home: logos redondos dentro del carril de marcas --- */
+.brand-lane--circles .brand-card{
+  width:104px; height:104px;
+  border-radius:999px;
+  padding:0;
+  display:grid; place-items:center;
+  background: rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+  overflow:hidden;
+}
+
+/* Opcional: responsive */
+@media (max-width: 992px){
+  .brand-lane--circles .brand-card{ width:88px; height:88px; }
+}
+
+/* --- Overrides para que el logo llene el círculo y gane a reglas viejas --- */
+.brand-lane.brand-lane--circles .brand-card{
+  position: relative !important;
+  width:104px !important;
+  height:104px !important;
+  border-radius:999px !important;
+  padding:0 !important;
+  display:block !important;
+  overflow:hidden !important;
+}
+@media (max-width: 992px){
+  .brand-lane.brand-lane--circles .brand-card{
+    width:88px !important;
+    height:88px !important;
+  }
+}
+.brand-lane.brand-lane--circles .brand-card img{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:cover !important;      /* recorta y llena el círculo */
+  border-radius:50% !important;
+  display:block !important;
+  padding:0 !important;
+  transform:scale(1.85) !important; /* ajusta 1.6–2.1 según “aire” del SVG */
+  transform-origin:center !important;
+}
+
+/* ===== Ajuste fino: ampliar logos con "aire" interno (solo en modo círculos) ===== */
+.brand-lane.brand-lane--circles .brand-card img{
+  position:absolute !important; inset:0 !important;
+  width:100% !important; height:100% !important;
+  object-fit:cover !important; border-radius:50% !important;
+  transform-origin:center !important;
+  /* zoom base (si aún los ves chicos, súbelo a 2.2–2.6) */
+  transform:scale(2.0) !important;
+}
+
+/* Per-brand (ajusta a tu gusto) */
+.brand-lane.brand-lane--circles .brand-card[data-brand="nintendo"] img{   transform:scale(2.6) !important; }
+.brand-lane.brand-lane--circles .brand-card[data-brand="playstation"] img{transform:scale(2.3) !important; }
+.brand-lane.brand-lane--circles .brand-card[data-brand="xbox"] img{       transform:scale(2.2) !important; }
+
+/* Si alguna otra marca queda con borde, crea su regla como las de arriba. */

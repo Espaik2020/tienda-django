@@ -1,0 +1,4 @@
+Best route visiting order (cycle):
+C5 -> C13 -> C1 -> C17 -> C6 -> C4 -> C14 -> C8 -> C3 -> C19 -> C12 -> C9 -> C2 -> C18 -> C7 -> C15 -> C11 -> C16 -> C10 -> C20 -> C5
+
+Total distance: 471.71
