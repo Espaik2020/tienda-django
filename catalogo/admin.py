@@ -5,7 +5,7 @@ from django.utils.text import slugify
 from django.utils import timezone 
 from .models import (
     Categoria, Producto, Marca, Estudio, Tematica, ProductoImagen, Segmento,
-    NewsletterSubscriber, 
+    NewsletterSubscriber, Order,
 )
 
 # ======================
@@ -304,6 +304,34 @@ class NewsletterSubscriberAdmin(admin.ModelAdmin):
         updated = queryset.update(is_confirmed=True, confirmed_at=timezone.now())
         self.message_user(request, f"{updated} suscriptor(es) marcados como confirmados.")
     mark_confirmed.short_description = "Marcar como confirmados"
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "created_at", "total", "status", "items_count")
+    list_filter = ("status", "created_at")
+    search_fields = ("id", "user__email", "user__username")
+    ordering = ("-created_at",)
+    readonly_fields = ("created_at", "items_pretty")
+
+    fieldsets = (
+        ("Pedido", {"fields": ("user", "status", "total", "created_at")}),
+        ("Contenido (snapshot JSON)", {"fields": ("items_pretty",)}),
+    )
+
+    def items_count(self, obj):
+        try:
+            return sum(int(i.get("qty", 1)) for i in (obj.items or []))
+        except Exception:
+            return 0
+    items_count.short_description = "Artículos"
+
+    def items_pretty(self, obj):
+        import json
+        return format_html(
+            '<pre style="white-space:pre-wrap;margin:0">{}</pre>',
+            json.dumps(obj.items or [], ensure_ascii=False, indent=2)
+        )
+    items_pretty.short_description = "Items (JSON)"
 
 
 
