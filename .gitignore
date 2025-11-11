@@ -8,6 +8,12 @@ venv/
 .env
 db.sqlite3
 staticfiles/
-media/
+
+# ignora todo media
+/media/**
+# pero sí conserva los .gitkeep para que aparezcan las carpetas
+!/media/.gitkeep
+!/media/**/.gitkeep
+
 .DS_Store
 *.log
