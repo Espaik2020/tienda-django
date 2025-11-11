@@ -11,16 +11,22 @@ urlpatterns = [
     path('carrito/agregar/<int:producto_id>/', views.carrito_agregar, name='carrito_agregar'),
     path('carrito/quitar/<int:producto_id>/', views.carrito_quitar, name='carrito_quitar'),
 
+    # 🆕 Checkout y pedidos
+    path('checkout/', views.checkout, name='checkout'),                     # 🆕
+    path('mis-pedidos/', views.mis_pedidos, name='mis_pedidos'),            # 🆕
+    path('pedido/<int:order_id>/', views.pedido_detalle, name='pedido_detalle'),  # 🆕
+
     # Marcas / Temáticas
     path('marcas/', views.MarcasLista.as_view(), name='marcas_lista'),
     path('marcas/<slug:slug>/', views.MarcaDetalle.as_view(), name='marca_detalle'),
     path('estilos/<slug:slug>/', views.TematicaDetalle.as_view(), name='tematica_detalle'),
 
-    # Newsletter (nuevo)
+    # Newsletter
     path('suscribir/', views.newsletter_subscribe, name='newsletter_subscribe'),
     path('suscribir/confirmar/<str:token>/', views.newsletter_confirm, name='newsletter_confirm'),
 
-    # 💠 NUEVA RUTA PARA EL PERFIL DE USUARIO
+    # Perfil
     path('mi-cuenta/', views.cuenta_perfil, name='cuenta_perfil'),
 ]
+
 
