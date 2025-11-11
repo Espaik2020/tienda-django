@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Mis pedidos - Tienda{% endblock %}
+
+{% block content %}
+<h1 class="mb-3">Mis pedidos</h1>
+
+{% if pedidos %}
+  <div class="table-responsive d-none d-lg-block">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Fecha</th>
+          <th>Total</th>
+          <th>Estatus</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in pedidos %}
+        <tr>
+          <td>#{{ p.id }}</td>
+          <td>{{ p.created_at|date:"Y-m-d H:i" }}</td>
+          <td>$ {{ p.total|floatformat:2 }}</td>
+          <td>
+            {% if p.status == "PAID" %}
+              <span class="badge text-bg-success">Pagado</span>
+            {% elif p.status == "CANCELLED" %}
+              <span class="badge text-bg-danger">Cancelado</span>
+            {% else %}
+              <span class="badge text-bg-secondary">Creado</span>
+            {% endif %}
+          </td>
+          <td class="text-end">
+            <a class="btn btn-sm btn-outline-primary" href="{% url 'pedido_detalle' p.id %}">Ver detalle</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {# Tarjetas en móvil #}
+  <div class="d-lg-none d-flex flex-column gap-3">
+    {% for p in pedidos %}
+      <div class="p-3 border rounded-3">
+        <div class="d-flex justify-content-between">
+          <strong>Pedido #{{ p.id }}</strong>
+          <small class="text-muted">{{ p.created_at|date:"Y-m-d H:i" }}</small>
+        </div>
+        <div class="mt-2 d-flex justify-content-between">
+          <span>Total</span>
+          <span class="fw-bold">$ {{ p.total|floatformat:2 }}</span>
+        </div>
+        <div class="mt-2">
+          {% if p.status == "PAID" %}
+            <span class="badge text-bg-success">Pagado</span>
+          {% elif p.status == "CANCELLED" %}
+            <span class="badge text-bg-danger">Cancelado</span>
+          {% else %}
+            <span class="badge text-bg-secondary">Creado</span>
+          {% endif %}
+        </div>
+        <a class="btn btn-sm btn-outline-primary w-100 mt-3" href="{% url 'pedido_detalle' p.id %}">Ver detalle</a>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="text-center py-5">
+    <p class="mb-3">Aún no tienes pedidos.</p>
+    <a class="btn btn-primary" href="{% url 'producto_lista' %}">Explorar productos</a>
+  </div>
+{% endif %}
+{% endblock %}
