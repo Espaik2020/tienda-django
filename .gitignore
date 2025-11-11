@@ -2,16 +2,22 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
 .venv/
 env/
 venv/
 .env
+
 db.sqlite3
 staticfiles/
 
-# ignora todo media
+# Ignorar todo el directorio media (archivos subidos en producción)
+# pero dejar rastreados los .gitkeep para que existan las carpetas vacías
 /media/**
-# pero sí conserva los .gitkeep para que aparezcan las carpetas
 !/media/.gitkeep
 !/media/**/.gitkeep
+
+# Cosas varias de sistema/logs (opcional pero recomendable)
+.DS_Store
+*.log
 
