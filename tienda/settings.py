@@ -128,14 +128,13 @@ USE_I18N = True
 USE_TZ = True
 
 # === Archivos estáticos / media ===
+# === Archivos estáticos / media ===
 STATIC_URL = "/static/"
-# ✅ Deja aquí solo carpetas "globales" (si las tienes). NO metas 'catalogo/static'.
-STATICFILES_DIRS = [
-    BASE_DIR / "static",   # si no existe, puedes borrar esta línea
-]
-STATIC_ROOT = BASE_DIR / "staticfiles"
 
-]
+# Si NO tienes carpeta global "static" en la raíz del repo, deja la lista vacía.
+# Si sí la tienes, usa: STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = []
+
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
