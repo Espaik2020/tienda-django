@@ -3,13 +3,14 @@ from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 from django.db.models import Q, Count
-from .models import Producto, Categoria, Marca, Estudio, Tematica, Segmento  # 👈 añade Segmento
+from .models import Producto, Categoria, Marca, Estudio, Tematica, Segmento  #  añade Segmento
 from django.contrib import messages
 from django.urls import reverse
 from django.utils import timezone
 from django.core.mail import send_mail
 from .models import NewsletterSubscriber
 from django.contrib.auth.decorators import login_required 
+from .models import Order
 
 
 # =======================
@@ -397,6 +398,42 @@ def carrito_quitar(request, producto_id):
         _save_cart(request.session, cart)
     return redirect("carrito_detalle")
 
+def _cart_items_and_total(session):
+    """
+    Convierte el carrito en:
+      - items: lista de dicts [{id, name, price, qty}]
+      - total: Decimal redondeado a 2 decimales
+    Usa precio_final() si existe.
+    """
+    cart = _get_cart(session)  # dict: {product_id: qty}
+    if not cart:
+        return [], Decimal("0.00")
+
+    ids = [int(pid) for pid in cart.keys()]
+    productos = Producto.objects.filter(id__in=ids)
+
+    items = []
+    total = Decimal("0.00")
+
+    for p in productos:
+        qty = int(cart.get(str(p.id), 0))
+        if qty <= 0:
+            continue
+
+        precio_unit = Decimal(str(p.precio_final() if hasattr(p, "precio_final") else p.precio)).quantize(Decimal("0.01"))
+        subtotal = (precio_unit * qty).quantize(Decimal("0.01"))
+        total += subtotal
+
+        items.append({
+            "id": p.id,
+            "name": p.nombre,
+            "price": float(precio_unit),  # JSON serializable
+            "qty": qty,
+        })
+
+    return items, total.quantize(Decimal("0.01"))
+
+
 def newsletter_subscribe(request):
     if request.method != "POST":
         return redirect("inicio")
@@ -455,3 +492,40 @@ def newsletter_confirm(request, token):
 def cuenta_perfil(request):
     # Envía a /cuenta/ (accounts.views.cuenta_panel)
     return redirect("cuenta_panel")
+
+@login_required
+def checkout(request):
+    items, total = _cart_items_and_total(request.session)
+    if not items:
+        messages.warning(request, "Tu carrito está vacío.")
+        return redirect("carrito_detalle")
+
+    # Guarda pedido SIMULADO
+    order = Order.objects.create(
+        user=request.user,
+        total=total,
+        items=items,
+        status="PAID",  # simulamos pago aprobado
+    )
+
+    # Limpia carrito
+    _save_cart(request.session, {})
+
+    messages.success(request, f"Compra simulada creada: Pedido #{order.id}")
+    return redirect("pedido_detalle", order_id=order.id)
+
+
+@login_required
+def mis_pedidos(request):
+    pedidos = Order.objects.filter(user=request.user).order_by("-created_at")
+    return render(request, "catalogo/mis_pedidos.html", {"pedidos": pedidos})
+
+
+@login_required
+def pedido_detalle(request, order_id):
+    try:
+        order = Order.objects.get(pk=order_id, user=request.user)
+    except Order.DoesNotExist:
+        messages.error(request, "Pedido no encontrado.")
+        return redirect("mis_pedidos")
+    return render(request, "catalogo/pedido_detalle.html", {"order": order})
