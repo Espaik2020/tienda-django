@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Pedido #{{ order.id }} - Tienda{% endblock %}
+
+{% block content %}
+<h1 class="mb-3">Pedido #{{ order.id }}</h1>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="p-3 border rounded-3">
+      <div class="d-flex flex-wrap gap-3">
+        <div><strong>Fecha:</strong> {{ order.created_at|date:"Y-m-d H:i" }}</div>
+        <div>
+          <strong>Estatus:</strong>
+          {% if order.status == "PAID" %}
+            <span class="badge text-bg-success">Pagado</span>
+          {% elif order.status == "CANCELLED" %}
+            <span class="badge text-bg-danger">Cancelado</span>
+          {% else %}
+            <span class="badge text-bg-secondary">Creado</span>
+          {% endif %}
+        </div>
+        <div><strong>Total:</strong> $ {{ order.total|floatformat:2 }}</div>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <h5>Artículos</h5>
+      {% if order.items %}
+        <div class="table-responsive d-none d-lg-block">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th class="text-center">Cant.</th>
+                <th class="text-end">Precio</th>
+                <th class="text-end">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for it in order.items %}
+              <tr>
+                <td>{{ it.name }}</td>
+                <td class="text-center">{{ it.qty }}</td>
+                <td class="text-end">$ {{ it.price|floatformat:2 }}</td>
+                <td class="text-end">$ {{ it.price|floatformat:2|add:"0"|floatformat:2|floatformat }}{% comment %}placeholder{% endcomment %}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        {# tarjetas en móvil #}
+        <div class="d-lg-none d-flex flex-column gap-3">
+          {% for it in order.items %}
+          <div class="p-3 border rounded-3">
+            <div class="fw-bold">{{ it.name }}</div>
+            <div class="d-flex justify-content-between mt-2">
+              <span>Cantidad</span><span class="fw-semibold">{{ it.qty }}</span>
+            </div>
+            <div class="d-flex justify-content-between mt-1">
+              <span>Precio</span><span class="fw-semibold">$ {{ it.price|floatformat:2 }}</span>
+            </div>
+            <div class="d-flex justify-content-between mt-1">
+              <span>Subtotal</span><span class="fw-bold">
+                $ {{ it.price|floatformat:2|floatformat }}
+              </span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>Sin artículos.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="p-3 border rounded-3">
+      <h5>Resumen</h5>
+      <div class="d-flex justify-content-between mt-2">
+        <span>Total</span>
+        <span class="fw-bold">$ {{ order.total|floatformat:2 }}</span>
+      </div>
+
+      <div class="d-grid gap-2 mt-3">
+        <a class="btn btn-outline-secondary" href="{% url 'mis_pedidos' %}">Volver a pedidos</a>
+        <a class="btn btn-primary" href="{% url 'producto_lista' %}">Seguir comprando</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
