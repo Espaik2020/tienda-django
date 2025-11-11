@@ -5,6 +5,9 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import RedirectView
 from django.views.generic import TemplateView
+from django.urls import re_path
+from django.views.static import serve as static_serve
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -58,3 +61,9 @@ urlpatterns += [
 if settings.DEBUG:
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Servir MEDIA también en hosting (opcional, activado por ENV)
+if getattr(settings, "SERVE_MEDIA", False):
+    urlpatterns += [
+        re_path(r"^media/(?P<path>.*)$", static_serve, {"document_root": settings.MEDIA_ROOT}),
+    ]
