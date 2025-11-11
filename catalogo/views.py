@@ -490,7 +490,8 @@ def newsletter_confirm(request, token):
 
 @login_required
 def cuenta_perfil(request):
-    return redirect("mis_pedidos")
+    # Lleva al panel de cuenta del app "accounts"
+    return redirect("cuenta_panel")
 
 @login_required
 def checkout(request):
