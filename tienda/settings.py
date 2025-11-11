@@ -139,6 +139,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+SERVE_MEDIA = ENV("DJ_SERVE_MEDIA", "false").lower() == "true"
 
 # === Llaves primarias por defecto ===
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
