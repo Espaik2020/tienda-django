@@ -156,10 +156,11 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = "account_login"
 
-# Política de cuentas (allauth) — nueva sintaxis (evita deprecados)
-ACCOUNT_LOGIN_METHODS = {"email"}                              # reemplaza ACCOUNT_AUTHENTICATION_METHOD
-ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"] # reemplaza EMAIL_REQUIRED/USERNAME_REQUIRED
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"                       # exige verificación por correo
+# Política de cuentas (allauth) para DEMO (sin verificación de email)
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"  # compatible con todas las versiones
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = "none"               # <-- clave para registrar y entrar sin correo
 
 # === Email real (por defecto: consola en dev para no fallar mientras configuras SMTP) ===
 # Cuando ya tengas SMTP, cambia a smtp y rellena variables (abajo hay override por ENV).
@@ -238,6 +239,13 @@ if ENV("DATABASE_URL"):
         conn_max_age=600,
         ssl_require=True
     )
+
+# Política de cuentas (allauth) para DEMO (sin verificación de email)
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"  # compatible con todas las versiones
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = "none"               # <-- clave para registrar y entrar sin correo
+
 
 # Email por ENV (puedes activar SMTP real sin tocar el código)
 EMAIL_BACKEND = ENV("DJ_EMAIL_BACKEND", EMAIL_BACKEND)
