@@ -109,7 +109,7 @@
           </div>
 
           {% if user.is_authenticated %}
-            <a class="btn btn-primary-cta w-100 mt-3" href="{% url 'carrito_checkout' %}">Proceder al pago</a>
+             <a class="btn btn-primary-cta w-100 mt-3" href="{% url 'checkout' %}">Proceder al pago</a>
           {% else %}
             <a class="btn btn-primary-cta w-100 mt-3" href="{% url 'account_login' %}?next={% url 'checkout' %}">Iniciar sesión y pagar</a>
           {% endif %}
@@ -174,7 +174,7 @@
       </div>
 
       {% if user.is_authenticated %}
-        <a class="btn btn-primary-cta w-100 mt-3" href="{% url 'carrito_checkout' %}">Proceder al pago</a>
+         <a class="btn btn-primary-cta w-100 mt-3" href="{% url 'checkout' %}">Proceder al pago</a>
       {% else %}
         <a class="btn btn-primary-cta w-100 mt-3" href="{% url 'account_login' %}?next={% url 'checkout' %}">Iniciar sesión y pagar</a>
       {% endif %}
