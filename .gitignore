@@ -15,5 +15,3 @@ staticfiles/
 !/media/.gitkeep
 !/media/**/.gitkeep
 
-.DS_Store
-*.log
