@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Carrito - Tienda{% endblock %}
+{% block title_tag %}Carrito - Tienda{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -108,7 +108,11 @@
             <span>$ {{ total_con_envio|floatformat:2 }}</span>
           </div>
 
-          <a class="btn btn-primary-cta w-100 mt-3" href="{% url 'producto_lista' %}?ofertas=1">Proceder al pago</a>
+          {% if user.is_authenticated %}
+            <a class="btn btn-primary-cta w-100 mt-3" href="{% url 'checkout' %}">Proceder al pago</a>
+          {% else %}
+            <a class="btn btn-primary-cta w-100 mt-3" href="{% url 'account_login' %}?next={% url 'checkout' %}">Iniciar sesión y pagar</a>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -169,7 +173,11 @@
         <span>$ {{ total_con_envio|floatformat:2 }}</span>
       </div>
 
-      <a class="btn btn-primary-cta w-100 mt-3" href="{% url 'producto_lista' %}?ofertas=1">Proceder al pago</a>
+      {% if user.is_authenticated %}
+        <a class="btn btn-primary-cta w-100 mt-3" href="{% url 'checkout' %}">Proceder al pago</a>
+      {% else %}
+        <a class="btn btn-primary-cta w-100 mt-3" href="{% url 'account_login' %}?next={% url 'checkout' %}">Iniciar sesión y pagar</a>
+      {% endif %}
     </div>
 
     <a href="{% url 'producto_lista' %}" class="btn btn-outline-light w-100 mt-3">Seguir comprando</a>
