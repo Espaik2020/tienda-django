@@ -3,7 +3,9 @@ from django.db import models
 from django.urls import reverse
 from ckeditor.fields import RichTextField
 from django.utils import timezone
+from django.conf import settings
 import secrets
+
 
 # ========= MARCA =========
 class Marca(models.Model):
@@ -205,6 +207,36 @@ class NewsletterSubscriber(models.Model):
         ordering = ["-created_at"]
         verbose_name = "Suscriptor"
         verbose_name_plural = "Suscriptores"
+
+# ========= PEDIDO (simulado) =========
+class Order(models.Model):
+    STATUS_CHOICES = [
+        ("CREATED", "Creado"),
+        ("PAID", "Pagado (simulado)"),
+        ("CANCELLED", "Cancelado"),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # total y snapshot de items (carrito) para demo
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    items = models.JSONField(default=list)  # [{"id":"SKU1","name":"...","price":199.0,"qty":2}, ...]
+
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="CREATED")
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Pedido"
+        verbose_name_plural = "Pedidos"
+
+    def __str__(self):
+        who = self.user.email if self.user else "anónimo"
+        return f"Order #{self.pk} - {who} - ${self.total}"
+    
+    
 
     def __str__(self):
         return self.email
