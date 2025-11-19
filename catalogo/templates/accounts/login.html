@@ -64,7 +64,6 @@
     color: #9ba4d4;
     margin-bottom: 1.75rem;
   }
-
   .auth-label {
     font-size: .82rem;
     text-transform: uppercase;
@@ -73,11 +72,7 @@
     color: #cfd8ff;
     margin-bottom: .25rem;
   }
-
-  /* Estilizar inputs que pinta allauth */
-  .auth-card input[type="text"],
-  .auth-card input[type="email"],
-  .auth-card input[type="password"] {
+  .auth-card .form-control {
     background: rgba(5, 10, 26, .9);
     border-radius: 999px;
     border: 1px solid rgba(255,255,255,.14);
@@ -85,17 +80,13 @@
     font-size: .95rem;
     padding-inline: 1rem;
     height: 44px;
-    width: 100%;
   }
-  .auth-card input[type="text"]:focus,
-  .auth-card input[type="email"]:focus,
-  .auth-card input[type="password"]:focus {
+  .auth-card .form-control:focus {
     border-color: #2EE6A8;
     box-shadow: 0 0 0 1px color-mix(in oklab, #2EE6A8 70%, transparent);
     background: rgba(5, 10, 26, 1);
     color: #fff;
   }
-
   .auth-help {
     font-size: .85rem;
     color: #9ba4d4;
@@ -114,6 +105,7 @@
     margin: 1.25rem 0;
   }
 
+  /* Por si acaso no estuvieran definidas en otro lado */
   @keyframes menuShine{
     0%{background-position:0% center}
     100%{background-position:300% center}
@@ -129,34 +121,34 @@
 <div class="auth-page container">
   <div class="auth-card">
 
-    <h1 class="auth-title"><span>Iniciar sesión</span></h1>
+    <h1 class="auth-title"><span>INICIAR SESIÓN</span></h1>
     <p class="auth-subtitle">
       Accede a tu cuenta para seguir tus pedidos y guardar tus productos favoritos.
     </p>
 
-    {# Errores generales del formulario (credenciales incorrectas, cuenta inactiva, etc.) #}
+    {# Errores generales del formulario (credenciales incorrectas, etc.) #}
     {% if form.non_field_errors %}
       <div class="alert alert-danger py-2 mb-3">
         {{ form.non_field_errors|striptags }}
       </div>
     {% endif %}
 
-    <form method="post" novalidate>
+    <form method="post" action="{% url 'account_login' %}" novalidate>
       {% csrf_token %}
 
-      {# Campo next / redirect (versión allauth) #}
+      {# Campo oculto para "next" / redirect #}
       {% if redirect_field_value %}
         <input type="hidden"
                name="{{ redirect_field_name }}"
                value="{{ redirect_field_value }}">
       {% endif %}
 
+      {# ===== LOGIN (usuario o email) ===== #}
       <div class="mb-3">
         <label class="auth-label" for="id_login">
           NOMBRE DE USUARIO O EMAIL
         </label>
 
-        {# Campo visual (el que ves y escribes) #}
         <input
           type="text"
           name="login"
@@ -167,7 +159,6 @@
           placeholder="tu_correo@ejemplo.com"
         >
 
-        {# Errores del campo login #}
         {% if form.login.errors %}
           <div class="text-danger small mt-1">
             {{ form.login.errors|striptags }}
@@ -175,16 +166,20 @@
         {% endif %}
       </div>
 
+      {# ===== PASSWORD ===== #}
       <div class="mb-1">
         <label class="auth-label d-flex justify-content-between align-items-center"
                for="{{ form.password.id_for_label }}">
-          <span>CONTRASEÑA</span>
+          <span>Contraseña</span>
           <a href="{% url 'account_reset_password' %}"
-             class="small text-decoration-none" style="color:#2EE6A8;">
+             class="small text-decoration-none"
+             style="color:#2EE6A8;">
             ¿Olvidaste tu contraseña?
           </a>
         </label>
+
         {{ form.password }}
+
         {% if form.password.errors %}
           <div class="text-danger small mt-1">
             {{ form.password.errors|striptags }}
@@ -217,5 +212,6 @@
   </div>
 </div>
 {% endblock %}
+
 
 
