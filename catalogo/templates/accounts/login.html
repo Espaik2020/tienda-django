@@ -134,7 +134,12 @@
 
     <form method="post" novalidate>
       {% csrf_token %}
-      <input type="hidden" name="next" value="{{ next }}">
+      {# Solo manda next si realmente viene algo #}
+      {% if redirect_field_value %}
+        <input type="hidden"
+               name="{{ redirect_field_name }}"
+               value="{{ redirect_field_value }}">
+      {% endif %}
 
       <div class="mb-3">
         <label class="auth-label" for="{{ form.login.id_for_label }}">
