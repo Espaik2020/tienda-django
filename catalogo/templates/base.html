@@ -616,7 +616,10 @@
         <div class="list-group list-group-flush">
           <a class="list-group-item list-group-item-action menu-link" href="{% url 'producto_lista' %}">Todos los productos</a>
           <a class="list-group-item list-group-item-action menu-link" href="{% url 'producto_lista' %}?destacados=1">Destacados</a>
-          <a class="list-group-item list-group-item-action menu-link" href="{% url 'producto_lista' %}?ofertas=1">Ofertas</a>
+          <a class="list-group-item list-group-item-action menu-link menu-link-offer"
+             href="{% url 'producto_lista' %}?ofertas=1">
+            Ofertas
+          </a>
           <a class="list-group-item list-group-item-action menu-link" href="{% url 'marcas_lista' %}">Marcas</a>
           <a class="list-group-item list-group-item-action menu-link" href="{% url 'carrito_detalle' %}">Carrito</a>
         </div>
