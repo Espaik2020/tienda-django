@@ -1,6 +1,4 @@
 {% extends "base.html" %}
-{% load i18n %}
-
 {% block title %}Ingresar{% endblock %}
 
 {% block content %}
@@ -11,36 +9,24 @@
         <div class="card-body">
           <h3 class="mb-3 text-center">Iniciar sesión</h3>
 
-          {% if form.non_field_errors %}
+          {% if form.errors %}
             <div class="alert alert-danger">
-              {% for err in form.non_field_errors %}
-                {{ err }}<br>
-              {% endfor %}
+              Usuario o contraseña incorrectos. Intenta de nuevo.
             </div>
           {% endif %}
 
-          <form method="post" action="{% url 'account_login' %}" novalidate>
+          <form method="post" novalidate>
             {% csrf_token %}
-            <input type="hidden" name="next" value="{{ next }}">
 
-            <div class="mb-3">
-              {{ form.login.label_tag }}
-              {{ form.login }}
-            </div>
-
-            <div class="mb-3">
-              {{ form.password.label_tag }}
-              {{ form.password }}
-            </div>
-
-            {% if form.remember %}
-            <div class="form-check mb-3">
-              {{ form.remember }}
-              <label class="form-check-label" for="{{ form.remember.id_for_label }}">
-                Recuérdame
-              </label>
-            </div>
+            {# allauth usa redirect_field_name / redirect_field_value #}
+            {% if redirect_field_value %}
+              <input type="hidden"
+                     name="{{ redirect_field_name }}"
+                     value="{{ redirect_field_value }}">
             {% endif %}
+
+            {# Campos del formulario (email/usuario + contraseña, recordar, etc.) #}
+            {{ form.as_p }}
 
             <div class="d-grid gap-2 mb-3">
               <button class="btn btn-primary" type="submit">Entrar</button>
@@ -53,7 +39,7 @@
 
           <p class="mt-3 text-center mb-0">
             ¿No tienes cuenta?
-            <a href="{% url 'account_signup' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">
+            <a href="{% url 'account_signup' %}{% if redirect_field_value %}?next={{ redirect_field_value }}{% endif %}">
               Regístrate
             </a>
           </p>
