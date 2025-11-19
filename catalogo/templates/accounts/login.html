@@ -138,11 +138,23 @@
 
       <div class="mb-3">
         <label class="auth-label" for="{{ form.login.id_for_label }}">
-          Nombre de usuario o email
+          NOMBRE DE USUARIO O EMAIL
         </label>
-        {{ form.login }}
+
+        <input
+          type="text"
+          name="{{ form.login.html_name }}"
+          id="{{ form.login.id_for_label }}"
+          class="form-control{% if form.login.errors %} is-invalid{% endif %}"
+          autocomplete="email username"
+          value="{{ form.login.value|default_if_none:'' }}"
+          placeholder="tu_correo@ejemplo.com"
+        >
+
         {% if form.login.errors %}
-          <div class="text-danger small mt-1">{{ form.login.errors|striptags }}</div>
+          <div class="text-danger small mt-1">
+            {{ form.login.errors|striptags }}
+          </div>
         {% endif %}
       </div>
 
