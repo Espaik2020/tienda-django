@@ -52,9 +52,14 @@ urlpatterns += [
 
 # --------- Alias cortos para login/signup/logout (opcional, útiles para enlaces sueltos) ---------
 urlpatterns += [
-    path("login/",  RedirectView.as_view(pattern_name="account_login",  permanent=False)),
-    path("signup/", RedirectView.as_view(pattern_name="account_signup", permanent=False)),
-    path("logout/", RedirectView.as_view(pattern_name="account_logout", permanent=False)),
+    # /login  -> usa la vista "login" que definiste en accounts/urls.py
+    path("login/",  RedirectView.as_view(pattern_name="login",  permanent=False)),
+
+    # /signup -> usa tu vista signup de accounts/urls.py
+    path("signup/", RedirectView.as_view(pattern_name="signup", permanent=False)),
+
+    # /logout -> usa tu logout de accounts/urls.py
+    path("logout/", RedirectView.as_view(pattern_name="logout", permanent=False)),
 ]
 
 # Archivos estáticos y de medios en desarrollo
