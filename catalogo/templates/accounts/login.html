@@ -26,20 +26,43 @@
       0 0 0 1px rgba(255,255,255,.02);
     color: #e6f1ff;
   }
+
+  /* ===== TÍTULO CON EFECTO ARCOÍRIS ===== */
   .auth-title {
     font-family: "Outfit", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    font-weight: 800;
-    letter-spacing: .04em;
+    font-weight: 900;
+    letter-spacing: .18em;
     text-transform: uppercase;
-    font-size: 1.3rem;
+    font-size: 1.35rem;
     text-align: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
+    position: relative;
   }
+  .auth-title span {
+    display: inline-block;
+    background: linear-gradient(90deg,#ff5f6d 0%,#ffc371 20%,#65ffe1 40%,#7aa2ff 60%,#e07bff 80%,#ff5f6d 100%);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: menuShine 6s linear infinite, hueCycle 12s linear infinite;
+  }
+  .auth-title::after {
+    content: "";
+    display: block;
+    height: 2px;
+    width: 70%;
+    margin: .75rem auto 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg,#ff5f6d,#ffc371,#65ffe1,#7aa2ff,#e07bff,#ff5f6d);
+    opacity: .9;
+  }
+
   .auth-subtitle {
     text-align: center;
     font-size: .9rem;
     color: #9ba4d4;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
   }
   .auth-label {
     font-size: .82rem;
@@ -81,6 +104,16 @@
     background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
     margin: 1.25rem 0;
   }
+
+  /* Por si acaso no estuvieran definidas en otro lado */
+  @keyframes menuShine{
+    0%{background-position:0% center}
+    100%{background-position:300% center}
+  }
+  @keyframes hueCycle{
+    0%{filter:hue-rotate(0deg) saturate(120%)}
+    100%{filter:hue-rotate(360deg) saturate(120%)}
+  }
 </style>
 {% endblock %}
 
@@ -88,7 +121,7 @@
 <div class="auth-page container">
   <div class="auth-card">
 
-    <h1 class="auth-title">Iniciar sesión</h1>
+    <h1 class="auth-title"><span>Iniciar sesión</span></h1>
     <p class="auth-subtitle">
       Accede a tu cuenta para seguir tus pedidos y guardar tus productos favoritos.
     </p>
