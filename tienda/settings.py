@@ -154,7 +154,7 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
-LOGIN_URL = "account_login"
+LOGIN_URL = "login"
 
 # Política de cuentas (allauth) para DEMO (sin verificación de email)
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"  # compatible con todas las versiones
