@@ -360,34 +360,45 @@
       body.has-mobile-nav { padding-bottom: 0; }
     }
 
-    /* ==== Link “Ofertas” con texto dorado brillante ==== */
+    /* ===== Texto dorado para el link "Ofertas" (estilo SEGMENTOS) ===== */
 .menu-link-offer{
   position: relative;
-  font-weight: 800;
+}
+
+/* Solo el texto dentro del link */
+.menu-link-offer .menu-gold-text{
   text-transform: uppercase;
+  font-weight: 800;
   letter-spacing: .08em;
-  /* mismo estilo de texto que los demás */
+  display: inline-block;
+
+  /* gradiente dorado + animación tipo arcoiris */
   background: linear-gradient(
     90deg,
-    #fff7d1 0%,
-    #ffe28a 25%,
-    #ffd347 50%,
-    #ffe28a 75%,
-    #fff7d1 100%
+    #fff7cf 0%,
+    #ffe27a 20%,
+    #ffcf3b 50%,
+    #ffe27a 80%,
+    #fff7cf 100%
   );
   background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;                  /* hace el texto “hueco” y muestra el gradiente */
-  animation: menuShine 6s linear infinite;  /* reutiliza la animación arcoiris */
+  color: transparent;
+  animation: menuShine 6s linear infinite;
+  
+  /* brillito suave como glow */
+  text-shadow:
+    0 0 6px rgba(255, 225, 140, .7),
+    0 0 12px rgba(255, 200, 80, .45);
 }
 
-/* Hover: un poco más de contraste/brillo */
-.menu-link-offer:hover,
-.menu-link-offer:focus-visible{
+/* opcional: un pelín más de brillo al pasar el mouse */
+.menu-link-offer:hover .menu-gold-text,
+.menu-link-offer:focus-visible .menu-gold-text{
   text-shadow:
-    0 0 6px rgba(255, 223, 128, .75),
-    0 0 14px rgba(255, 200, 80, .55);
+    0 0 8px rgba(255, 235, 160, .9),
+    0 0 18px rgba(255, 210, 100, .6);
 }
 
   </style>
@@ -648,7 +659,7 @@
           <a class="list-group-item list-group-item-action menu-link" href="{% url 'producto_lista' %}?destacados=1">Destacados</a>
           <a class="list-group-item list-group-item-action menu-link menu-link-offer"
              href="{% url 'producto_lista' %}?ofertas=1">
-            Ofertas
+            <span class="menu-gold-text">Ofertas</span>
           </a>
           <a class="list-group-item list-group-item-action menu-link" href="{% url 'marcas_lista' %}">Marcas</a>
           <a class="list-group-item list-group-item-action menu-link" href="{% url 'carrito_detalle' %}">Carrito</a>
