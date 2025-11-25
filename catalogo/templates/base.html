@@ -490,11 +490,20 @@
       <a href="{% url 'carrito_detalle' %}" class="btn btn-outline-light">Carrito</a>
 
       {% if user.is_authenticated %}
+
+        {# ✅ Solo usuarios staff/admin ven este botón #}
+        {% if user.is_staff %}
+          <a href="{% url 'admin:index' %}"
+             class="btn btn-outline-warning d-none d-lg-inline-flex ms-2">
+            Panel admin
+          </a>
+        {% endif %}
+
         <a href="{% url 'cuenta_perfil' %}" class="navbar-text text-white-50 hello-user user-link" title="Ir a mi perfil">
           Hola, {{ user.get_full_name|default:user.username }}
         </a>
 
-        <form method="post" action="{% url 'logout' %}" class="d-none d-lg-inline">
+        <form method="post" action="{% url 'logout' %}" class="d-none d-lg-inline ms-2">
           {% csrf_token %}
           <button type="submit" class="btn btn-outline-light">Salir</button>
         </form>
@@ -768,6 +777,15 @@
             <span class="text-white-50">Hola, {{ user.username }}</span>
             <a class="btn w-100 btn-neon menu-link" href="{% url 'producto_lista' %}">Explorar tienda</a>
             <a class="btn w-100 btn-outline-light menu-link" href="{% url 'carrito_detalle' %}">Ver carrito</a>
+
+            {#  Botón extra solo para admin/staff #}
+            {% if user.is_staff %}
+              <a class="btn w-100 btn-outline-warning menu-link"
+                 href="{% url 'admin:index' %}">
+                Panel de administración
+              </a>
+            {% endif %}
+
           {% else %}
             <a class="btn btn-outline-light menu-link" href="{% url 'login' %}?next={{ request.path }}">Ingresar</a>
             <a class="btn btn-neon menu-link" href="{% url 'signup' %}?next={{ request.path }}">Registrarse</a>
