@@ -213,7 +213,7 @@
 
   /* Activa la animación SOLO si el track tiene .is-auto */
   .showcase .showcase-track.is-auto{
-    animation: showcaseScroll 60s linear infinite !important;
+    animation: showcaseScroll 30s linear infinite !important;
     will-change: transform;
 
     /* mientras corre solo, quitamos snap/scroll para suavidad */
