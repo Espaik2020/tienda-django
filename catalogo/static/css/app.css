@@ -964,3 +964,9 @@ body{
   box-shadow: 0 10px 32px rgba(100,255,218,.4);
 }
 
+/* ===== Precio original tachado en detalle de producto ===== */
+.price-old{
+  color: #ffffff !important;   /* blanco */
+  opacity: 0.75;               /* un poco más suave, opcional */
+}
+

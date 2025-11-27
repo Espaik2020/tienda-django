@@ -82,7 +82,9 @@
 
     <div class="mb-3">
       {% if producto.descuento and producto.descuento|floatformat != "0" %}
-        <div><del class="text-muted">$ {{ producto.precio|floatformat:2 }}</del></div>
+        <div>
+          <del class="price-old">$ {{ producto.precio|floatformat:2 }}</del>
+        </div>
         <div class="fs-3 fw-bold">$ {{ producto.precio_final|floatformat:2 }}</div>
         <small class="text-success">-{{ producto.descuento|floatformat:0 }}%</small>
       {% else %}
