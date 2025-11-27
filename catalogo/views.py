@@ -18,27 +18,33 @@ from .models import Order
 # =======================
 def home(request):
     # Destacados elegidos en admin (ordenados por destacado_orden)
-    destacados = (Producto.objects
-                  .filter(activo=True, stock__gt=0, destacado=True)
-                  .select_related("categoria", "marca")
-                  .order_by("destacado_orden", "-creado")[:8])
+    destacados = (
+        Producto.objects
+        .filter(activo=True, stock__gt=0, destacado=True)
+        .select_related("categoria", "marca")
+        .order_by("destacado_orden", "-creado")[:8]
+    )
 
     # Nuevos
-    nuevos = (Producto.objects
-              .filter(activo=True, stock__gt=0)
-              .select_related("categoria", "marca")
-              .order_by("-creado")[:8])
+    nuevos = (
+        Producto.objects
+        .filter(activo=True, stock__gt=0)
+        .select_related("categoria", "marca")
+        .order_by("-creado")[:8]
+    )
 
     # Extras para el home
     categorias = Categoria.objects.order_by("nombre")[:8]
-    marcas = Marca.objects.order_by("nombre")[:12]
-    tematicas = (Tematica.objects
-                 .annotate(num_prod=Count("productos", filter=Q(
-                     productos__activo=True, productos__stock__gt=0
-                 )))
-                 .order_by("nombre")[:12])
+    marcas_menu = Marca.objects.order_by("nombre")[:12]   # 👈 nombre que usa el template
+    tematicas = (
+        Tematica.objects
+        .annotate(num_prod=Count("productos", filter=Q(
+            productos__activo=True, productos__stock__gt=0
+        )))
+        .order_by("nombre")[:12]
+    )
 
-    # ⬅NUEVO: imágenes para las tarjetas de categorías (playeras, hoodies, etc.)
+    # Imágenes para las tarjetas de categorías
     cat_slugs = ["playeras", "hoodies", "pantalones", "calzado"]
     cat_hero_imgs = {}
 
@@ -48,35 +54,34 @@ def home(request):
             .filter(
                 activo=True,
                 stock__gt=0,
-                categoria__slug=slug
+                categoria__slug__iexact=slug      # 👈 más robusto
             )
             .select_related("categoria")
-            .order_by("-destacado", "-creado")[:6]  # hasta 6 imágenes
+            .order_by("-destacado", "-creado")[:6]
         )
 
         urls = []
         for p in qs:
-            # si tienes propiedad portada_url la respetamos
-            if hasattr(p, "portada_url") and p.portada_url:
-                urls.append(p.portada_url)
-            elif getattr(p, "imagen", None):
+            url = getattr(p, "portada_url", None)
+            if not url and getattr(p, "imagen", None):
                 try:
-                    urls.append(p.imagen.url)
+                    url = p.imagen.url
                 except ValueError:
-                    # por si no hay archivo
-                    pass
+                    url = None
 
-        cat_hero_imgs[slug] = urls
+            if url:           # solo añadimos URLs reales
+                urls.append(url)
+
+        cat_hero_imgs[slug] = urls  # puede quedar [] y el template usa la de Unsplash
 
     return render(request, "catalogo/home.html", {
         "destacados": destacados,
         "nuevos": nuevos,
         "categorias": categorias,
-        "marcas": marcas,
+        "marcas_menu": marcas_menu,     # 👈 ojo, cambia a marcas_menu
         "tematicas": tematicas,
-        "cat_hero_imgs": cat_hero_imgs,   # ⬅️ mandar al template
+        "cat_hero_imgs": cat_hero_imgs,
     })
-
 
 # =======================
 # LISTA DE PRODUCTOS + FILTROS
