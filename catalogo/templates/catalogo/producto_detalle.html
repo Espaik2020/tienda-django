@@ -74,7 +74,7 @@
   <div class="col-md-7">
     <h1 class="mb-1">{{ producto.nombre }}</h1>
 
-    <p class="text-muted mb-2">
+    <p class="product-meta mb-2">
       {% if producto.marca %}{{ producto.marca.nombre }} · {% endif %}
       {% if producto.categoria %}{{ producto.categoria.nombre }}{% endif %}
       {% if producto.estudio %} · {{ producto.estudio.nombre }}{% endif %}

@@ -970,3 +970,11 @@ body{
   opacity: 0.75;               /* un poco más suave, opcional */
 }
 
+/* Texto de marca / categoría en detalle de producto */
+.product-meta{
+  color: #ffffff !important;   /* blanco */
+  opacity: 0.85;               /* un poco suave para que no compita con el título */
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
