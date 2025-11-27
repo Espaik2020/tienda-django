@@ -326,16 +326,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const span = card.querySelector('.cat-images');
     if (!img || !span) return;
 
-    const raw  = span.dataset.images || "";
-    const urls = raw.split(',').map(u => u.trim()).filter(Boolean);
+    const raw = span.dataset.images || "";
 
-    // Si no hay o solo hay una, no animamos
-    if (urls.length <= 1) return;
+    // Construimos el array de URLs
+    let urls = [];
 
-    // Si la imagen inicial no es una de la lista, la ponemos como primera
-    if (!urls.includes(img.src) && urls[0]) {
-      img.src = urls[0];
+    // 1) siempre incluimos la imagen actual del <img> (la que ya se ve)
+    const current = img.currentSrc || img.src;
+    if (current) {
+      urls.push(current);
     }
+
+    // 2) añadimos las que vienen en data-images (si hay)
+    raw.split(/\s+/).forEach(u => {
+      u = u.trim();
+      if (!u) return;
+      urls.push(u);
+    });
+
+    // si al final solo hay 1 URL de verdad, no vale la pena animar
+    if (urls.length <= 1) return;
 
     let idx = 0;
 
@@ -343,19 +353,22 @@ document.addEventListener('DOMContentLoaded', () => {
       idx = (idx + 1) % urls.length;
       const nextSrc = urls[idx];
 
-      // fade out
+      // fade-out
       img.style.opacity = 0;
 
-      // cambiamos src y volvemos a 1 sin depender de onload
       setTimeout(() => {
         img.src = nextSrc;
-        img.style.opacity = 1;
+        img.onload = () => {
+          // fade-in
+          img.style.opacity = 1;
+        };
       }, 250);
-    }, 4000); // cada 4s
+    }, 4000);  // cada 4 segundos
   });
 });
 </script>
 {% endblock %}
+
 
 
 
