@@ -70,9 +70,11 @@
   transform: translateY(-4px);
   box-shadow: 0 16px 38px rgba(0,0,0,.10);
 }
-.cat-grid .card-img-top {
+.cat-grid .card-img-top,
+.cat-grid .cat-hero-img {
   aspect-ratio: 4/3;
   object-fit: cover;
+  transition: opacity .25s ease-in-out;  /* <- para el fade */
 }
 .cat-grid .badge {
   background: rgba(0,0,0,.6);
