@@ -35,7 +35,7 @@ def home(request):
 
     # Extras para el home
     categorias = Categoria.objects.order_by("nombre")[:8]
-    marcas_menu = Marca.objects.order_by("nombre")[:12]   # 👈 nombre que usa el template
+    marcas_menu = Marca.objects.order_by("nombre")[:12]   # nombre que usa el template
     tematicas = (
         Tematica.objects
         .annotate(num_prod=Count("productos", filter=Q(
@@ -44,7 +44,7 @@ def home(request):
         .order_by("nombre")[:12]
     )
 
-    # Imágenes para las tarjetas de categorías
+    # ===== Imágenes para las tarjetas de categorías =====
     cat_slugs = ["playeras", "hoodies", "pantalones", "calzado"]
     cat_hero_imgs = {}
 
@@ -54,31 +54,55 @@ def home(request):
             .filter(
                 activo=True,
                 stock__gt=0,
-                categoria__slug__iexact=slug      # 👈 más robusto
+                categoria__slug__iexact=slug
             )
             .select_related("categoria")
-            .order_by("-destacado", "-creado")[:6]
+            .prefetch_related("imagenes")              # 👈 importante
+            .order_by("-destacado", "-creado")[:12]    # miramos más productos
         )
 
         urls = []
+        seen = set()
+
         for p in qs:
-            url = getattr(p, "portada_url", None)
-            if not url and getattr(p, "imagen", None):
+            # 1) portada_url
+            if hasattr(p, "portada_url") and p.portada_url:
+                if p.portada_url not in seen:
+                    urls.append(p.portada_url)
+                    seen.add(p.portada_url)
+
+            # 2) imagen principal
+            if getattr(p, "imagen", None):
                 try:
-                    url = p.imagen.url
+                    u = p.imagen.url
+                    if u and u not in seen:
+                        urls.append(u)
+                        seen.add(u)
                 except ValueError:
-                    url = None
+                    pass
 
-            if url:           # solo añadimos URLs reales
-                urls.append(url)
+            # 3) imágenes de la galería
+            for img in getattr(p, "imagenes", []).all():
+                if getattr(img, "imagen", None):
+                    try:
+                        u = img.imagen.url
+                        if u and u not in seen:
+                            urls.append(u)
+                            seen.add(u)
+                    except ValueError:
+                        pass
 
-        cat_hero_imgs[slug] = urls  # puede quedar [] y el template usa la de Unsplash
+            # no hace falta meter infinitas
+            if len(urls) >= 12:
+                break
+
+        cat_hero_imgs[slug] = urls   # si queda [], el template usa Unsplash
 
     return render(request, "catalogo/home.html", {
         "destacados": destacados,
         "nuevos": nuevos,
         "categorias": categorias,
-        "marcas_menu": marcas_menu,     # 👈 ojo, cambia a marcas_menu
+        "marcas_menu": marcas_menu,
         "tematicas": tematicas,
         "cat_hero_imgs": cat_hero_imgs,
     })
