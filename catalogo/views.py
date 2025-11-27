@@ -16,8 +16,6 @@ from .models import Order
 # =======================
 # HOME
 # =======================
-from django.db.models import Q
-
 def home(request):
     # Destacados elegidos en admin (ordenados por destacado_orden)
     destacados = (
@@ -43,42 +41,37 @@ def home(request):
         .annotate(num_prod=Count("productos", filter=Q(
             productos__activo=True, productos__stock__gt=0
         )))
-        .order_by("nombre")[:12]
+               .order_by("nombre")[:12]
     )
 
-    # ===== Imágenes para las tarjetas de categorías (solo imagen principal) =====
+    # 👇 SOLO UNA IMAGEN POR CATEGORÍA
     cat_slugs = ["playeras", "hoodies", "pantalones", "calzado"]
     cat_hero_imgs = {}
 
     for slug in cat_slugs:
-        qs = (
+        prod = (
             Producto.objects
-            .filter(activo=True, stock__gt=0)
             .filter(
-                Q(categoria__slug__iexact=slug) |       # por slug
-                Q(categoria__nombre__iexact=slug)        # o por nombre
+                activo=True,
+                stock__gt=0,
+                categoria__slug__iexact=slug
             )
             .select_related("categoria")
-            .order_by("-destacado", "-creado")[:10]
+            .order_by("-destacado", "-creado")
+            .first()             # 👈 solo uno
         )
 
-        urls = []
-        seen = set()
-
-        for p in qs:
-            # SOLO imagen principal
-            url = getattr(p, "portada_url", None)
-            if not url and getattr(p, "imagen", None):
+        url = None
+        if prod:
+            if getattr(prod, "portada_url", None):
+                url = prod.portada_url
+            elif getattr(prod, "imagen", None):
                 try:
-                    url = p.imagen.url
+                    url = prod.imagen.url
                 except ValueError:
                     url = None
 
-            if url and url not in seen:
-                urls.append(url)
-                seen.add(url)
-
-        cat_hero_imgs[slug] = urls  # si queda [], el template usa Unsplash
+        cat_hero_imgs[slug] = url  # string o None
 
     return render(request, "catalogo/home.html", {
         "destacados": destacados,
@@ -88,7 +81,6 @@ def home(request):
         "tematicas": tematicas,
         "cat_hero_imgs": cat_hero_imgs,
     })
-
 # =======================
 # LISTA DE PRODUCTOS + FILTROS
 # =======================

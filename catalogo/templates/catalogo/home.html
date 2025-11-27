@@ -145,89 +145,64 @@
   <div class="row g-3 cat-grid">
 
     {# PLAYERAS #}
-    {% with imgs=cat_hero_imgs.playeras %}
+    {% with hero=cat_hero_imgs.playeras %}
     <div class="col-6 col-md-4 col-lg-3">
       <a href="{% url 'producto_lista' %}?cat=playeras" class="text-decoration-none text-light">
-        <div class="card tilt h-100 cat-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="card tilt h-100" data-aos="fade-up" data-aos-delay="0">
           <span class="shine"></span>
-          <img loading="lazy" class="card-img-top cat-hero-img"
-               {% if imgs and imgs.0 %}
-                 src="{{ imgs.0 }}"
-               {% else %}
-                 src="https://images.unsplash.com/photo-1484515991647-c5760fcecfc7?q=80&w=1200&auto=format&fit=crop"
-               {% endif %}
+          <img loading="lazy" class="card-img-top"
+               src="{{ hero|default:'https://images.unsplash.com/photo-1484515991647-c5760fcecfc7?q=80&w=1200&auto=format&fit=crop' }}"
                alt="Playeras">
           <div class="card-body"><h6 class="m-0 fw-bold">Playeras</h6></div>
-          <span class="cat-images"
-                data-images="{% if imgs %}{{ imgs|join:' ' }}{% endif %}"></span>
         </div>
       </a>
     </div>
     {% endwith %}
 
     {# HOODIES #}
-    {% with imgs=cat_hero_imgs.hoodies %}
+    {% with hero=cat_hero_imgs.hoodies %}
     <div class="col-6 col-md-4 col-lg-3">
       <a href="{% url 'producto_lista' %}?cat=hoodies" class="text-decoration-none text-light">
-        <div class="card tilt h-100 cat-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="card tilt h-100" data-aos="fade-up" data-aos-delay="100">
           <span class="shine"></span>
-          <img loading="lazy" class="card-img-top cat-hero-img"
-               {% if imgs and imgs.0 %}
-                 src="{{ imgs.0 }}"
-               {% else %}
-                 src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1200&auto=format&fit=crop"
-               {% endif %}
+          <img loading="lazy" class="card-img-top"
+               src="{{ hero|default:'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1200&auto=format&fit=crop' }}"
                alt="Hoodies">
           <div class="card-body"><h6 class="m-0 fw-bold">Hoodies</h6></div>
-          <span class="cat-images"
-                data-images="{% if imgs %}{{ imgs|join:' ' }}{% endif %}"></span>
         </div>
       </a>
     </div>
     {% endwith %}
 
     {# PANTALONES #}
-    {% with imgs=cat_hero_imgs.pantalones %}
+    {% with hero=cat_hero_imgs.pantalones %}
     <div class="col-6 col-md-4 col-lg-3">
       <a href="{% url 'producto_lista' %}?cat=pantalones" class="text-decoration-none text-light">
-        <div class="card tilt h-100 cat-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="card tilt h-100" data-aos="fade-up" data-aos-delay="200">
           <span class="shine"></span>
-          <img loading="lazy" class="card-img-top cat-hero-img"
-               {% if imgs and imgs.0 %}
-                 src="{{ imgs.0 }}"
-               {% else %}
-                 src="https://images.unsplash.com/photo-1583496661160-cf9a8c2a7d7d?q=80&w=1200&auto=format&fit=crop"
-               {% endif %}
+          <img loading="lazy" class="card-img-top"
+               src="{{ hero|default:'https://images.unsplash.com/photo-1583496661160-cf9a8c2a7d7d?q=80&w=1200&auto=format&fit=crop' }}"
                alt="Pantalones">
           <div class="card-body"><h6 class="m-0 fw-bold">Pantalones</h6></div>
-          <span class="cat-images"
-                data-images="{% if imgs %}{{ imgs|join:' ' }}{% endif %}"></span>
         </div>
       </a>
     </div>
     {% endwith %}
 
     {# CALZADO #}
-    {% with imgs=cat_hero_imgs.calzado %}
+    {% with hero=cat_hero_imgs.calzado %}
     <div class="col-6 col-md-4 col-lg-3">
       <a href="{% url 'producto_lista' %}?cat=calzado" class="text-decoration-none text-light">
-        <div class="card tilt h-100 cat-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="card tilt h-100" data-aos="fade-up" data-aos-delay="300">
           <span class="shine"></span>
-          <img loading="lazy" class="card-img-top cat-hero-img"
-               {% if imgs and imgs.0 %}
-                 src="{{ imgs.0 }}"
-               {% else %}
-                 src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop"
-               {% endif %}
+          <img loading="lazy" class="card-img-top"
+               src="{{ hero|default:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop' }}"
                alt="Calzado">
           <div class="card-body"><h6 class="m-0 fw-bold">Calzado</h6></div>
-          <span class="cat-images"
-                data-images="{% if imgs %}{{ imgs|join:' ' }}{% endif %}"></span>
         </div>
       </a>
     </div>
     {% endwith %}
-
 
   </div>
 </section>
@@ -334,57 +309,6 @@
 
 {% endblock content %}
 
-{% block extra_js %}
-{{ block.super }}
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.cat-card').forEach(card => {
-    const img  = card.querySelector('.cat-hero-img');
-    const span = card.querySelector('.cat-images');
-    if (!img || !span) return;
-
-    const raw = span.dataset.images || "";
-
-    // Construimos el array de URLs
-    let urls = [];
-
-    // 1) siempre incluimos la imagen actual del <img> (la que ya se ve)
-    const current = img.currentSrc || img.src;
-    if (current) {
-      urls.push(current);
-    }
-
-    // 2) añadimos las que vienen en data-images (si hay)
-    raw.split(/\s+/).forEach(u => {
-      u = u.trim();
-      if (!u) return;
-      urls.push(u);
-    });
-
-    // si al final solo hay 1 URL de verdad, no vale la pena animar
-    if (urls.length <= 1) return;
-
-    let idx = 0;
-
-    setInterval(() => {
-      idx = (idx + 1) % urls.length;
-      const nextSrc = urls[idx];
-
-      // fade-out
-      img.style.opacity = 0;
-
-      setTimeout(() => {
-        img.src = nextSrc;
-        img.onload = () => {
-          // fade-in
-          img.style.opacity = 1;
-        };
-      }, 250);
-    }, 4000);  // cada 4 segundos
-  });
-});
-</script>
-{% endblock %}
 
 
 
