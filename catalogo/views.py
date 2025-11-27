@@ -38,12 +38,43 @@ def home(request):
                  )))
                  .order_by("nombre")[:12])
 
+    # ⬅NUEVO: imágenes para las tarjetas de categorías (playeras, hoodies, etc.)
+    cat_slugs = ["playeras", "hoodies", "pantalones", "calzado"]
+    cat_hero_imgs = {}
+
+    for slug in cat_slugs:
+        qs = (
+            Producto.objects
+            .filter(
+                activo=True,
+                stock__gt=0,
+                categoria__slug=slug
+            )
+            .select_related("categoria")
+            .order_by("-destacado", "-creado")[:6]  # hasta 6 imágenes
+        )
+
+        urls = []
+        for p in qs:
+            # si tienes propiedad portada_url la respetamos
+            if hasattr(p, "portada_url") and p.portada_url:
+                urls.append(p.portada_url)
+            elif getattr(p, "imagen", None):
+                try:
+                    urls.append(p.imagen.url)
+                except ValueError:
+                    # por si no hay archivo
+                    pass
+
+        cat_hero_imgs[slug] = urls
+
     return render(request, "catalogo/home.html", {
         "destacados": destacados,
         "nuevos": nuevos,
         "categorias": categorias,
         "marcas": marcas,
         "tematicas": tematicas,
+        "cat_hero_imgs": cat_hero_imgs,   # ⬅️ mandar al template
     })
 
 
