@@ -35,28 +35,29 @@
   <div class="col-md-5">
     {% with principal=producto.portada_url %}
       {% if principal %}
-        <img id="imgPrincipal"
-             src="{{ principal }}"
-             alt="{{ producto.nombre }}"
-             class="img-main mb-2">
+        <div class="product-frame mb-2">
+          <div class="product-frame-inner">
+            <img id="imgPrincipal"
+                 src="{{ principal }}"
+                 alt="{{ producto.nombre }}"
+                 class="img-main">
+          </div>
+        </div>
       {% else %}
         <div class="border rounded d-flex align-items-center justify-content-center" style="height:280px;">
           <span class="text-muted">Sin imagen</span>
         </div>
       {% endif %}
 
-      {# Thumbnails debajo #}
+      {# Thumbnails debajo (igual que antes) #}
       {% if galeria and galeria|length > 0 or principal %}
         <div class="d-flex gap-2 flex-wrap mt-2">
-          {# 1) Miniatura de la principal #}
           {% if principal %}
             <img src="{{ principal }}"
                  alt="{{ producto.nombre }}"
                  class="thumb active"
                  data-big="{{ principal }}">
           {% endif %}
-
-          {# 2) Miniaturas de la galería (evitar duplicar la principal) #}
           {% for img in galeria %}
             {% if img.imagen.url != principal %}
               <img src="{{ img.imagen.url }}"
@@ -69,6 +70,7 @@
       {% endif %}
     {% endwith %}
   </div>
+
 
   <!-- INFO -->
   <div class="col-md-7">
