@@ -4,14 +4,17 @@
 {% block content %}
 
 <style>
-  /* Estilos mínimos para la galería */
+  /* Imagen principal simple, sin fondo negro */
   .img-main {
     width: 100%;
-    max-height: 520px;
-    object-fit: contain;
-    background: #0b0b0b;
+    height: auto;          /* deja que la altura se ajuste sola */
+    display: block;
+    object-fit: contain;   /* muestra la imagen completa sin recortar */
+    background: transparent;
     border-radius: 10px;
   }
+
+  /* Thumbnails abajo */
   .thumb {
     width: 72px;
     height: 72px;
@@ -27,6 +30,7 @@
     border-color: #0d6efd;
   }
 </style>
+
 
 <a href="{% url 'producto_lista' %}" class="btn btn-link p-0 mb-3">&larr; Volver a productos</a>
 
