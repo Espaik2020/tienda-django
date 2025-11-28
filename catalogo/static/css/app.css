@@ -213,30 +213,55 @@ body{
 .card-img-top { height: 220px; object-fit: cover; }
 
 /* ====== PRODUCTO DETALLE — Galería ====== */
+.product-gallery{
+  border-radius: 22px;          /* borde semi redondo como las otras cards */
+  overflow: hidden;             /* corta las esquinas de la imagen */
+  background: #050b1a;          /* fondo oscuro de la tarjeta */
+  box-shadow: 0 18px 40px rgba(0,0,0,.40); /* opcional, para que “flote” */
+}
+
 .product-gallery .img-main{
   width: 100%;
   max-height: 520px;
-  height: auto;          /* opcional, pero ayuda */
   object-fit: contain;
-  background: transparent;  /* o simplemente elimina esta línea */
-  border-radius: 10px;
   display: block;
+  background: transparent;      /* sin fondo propio */
+  border-radius: 0;             /* importante: que NO redondee la imagen */
 }
 
 .product-gallery-thumbs{
-  display: flex; flex-wrap: wrap; gap: 8px; margin-top: .5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: .5rem;
 }
+
 .product-gallery-thumbs .thumb{
-  width: 72px; height: 72px; object-fit: cover; border-radius: 8px; cursor: pointer;
-  opacity: .85; border: 2px solid transparent; background: #0e1530;
-  transition: opacity .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  opacity: .85;
+  border: 2px solid transparent;
+  background: #0e1530;
+  transition: opacity .15s ease,
+              border-color .15s ease,
+              box-shadow .15s ease,
+              transform .1s ease;
 }
+
 .product-gallery-thumbs .thumb:hover,
 .product-gallery-thumbs .thumb.active{
-  opacity: 1; border-color: var(--brand, #0d6efd);
+  opacity: 1;
+  border-color: var(--brand, #0d6efd);
   box-shadow: 0 0 0 2px rgba(13,110,253,.20);
 }
-.product-gallery-thumbs .thumb:active{ transform: scale(.98); }
+
+.product-gallery-thumbs .thumb:active{
+  transform: scale(.98);
+}
+
 
 /* Modal de zoom en tema oscuro */
 .modal-content.bg-dark{ background: #0b1020; }

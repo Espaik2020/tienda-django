@@ -3,34 +3,6 @@
 
 {% block content %}
 
-<style>
-  /* Imagen principal simple, sin fondo negro */
-  .img-main {
-    width: 100%;
-    height: auto;          /* deja que la altura se ajuste sola */
-    display: block;
-    object-fit: contain;   /* muestra la imagen completa sin recortar */
-    background: transparent;
-    border-radius: 10px;
-  }
-
-  /* Thumbnails abajo */
-  .thumb {
-    width: 72px;
-    height: 72px;
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    opacity: .85;
-    border: 2px solid transparent;
-  }
-  .thumb:hover,
-  .thumb.active {
-    opacity: 1;
-    border-color: #0d6efd;
-  }
-</style>
-
 
 <a href="{% url 'producto_lista' %}" class="btn btn-link p-0 mb-3">&larr; Volver a productos</a>
 
