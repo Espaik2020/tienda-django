@@ -214,8 +214,9 @@ body{
 
 /* ====== PRODUCTO DETALLE — imagen principal ====== */
 .product-gallery{
-  border-radius: 22px;   /* marco redondo */
-  overflow: hidden;      /* recorta la imagen a ese borde */
+  border-radius: 22px;
+  overflow: hidden;
+  background: #02081a;
 }
 
 /* La imagen ocupa el contenedor y también tiene el mismo radio */
