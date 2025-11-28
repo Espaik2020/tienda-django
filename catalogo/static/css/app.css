@@ -214,20 +214,20 @@ body{
 
 /* ====== PRODUCTO DETALLE — imagen principal ====== */
 .product-gallery{
-  border-radius: 22px;
-  overflow: hidden;
-  background: #02081a;
+  border-radius: 22px;          /* marco redondo */
+  padding: 10px;                /* pequeño margen interno */
+  background: #020617;          /* fondo oscuro para que se vea el marco */
+  box-shadow: 0 14px 40px rgba(0,0,0,.35);
 }
 
-/* La imagen ocupa el contenedor y también tiene el mismo radio */
-.product-gallery .img-main,
-.img-main{
+/* La imagen va adentro con sus propias esquinas */
+.product-gallery .img-main{
   width: 100%;
   max-height: 520px;
   height: auto;
   object-fit: contain;
   display: block;
-  border-radius: 22px;   /* por si alguna img no está dentro de .product-gallery */
+  border-radius: 18px;          /* redondeado visible en la propia imagen */
 }
 
 /* ====== Thumbnails ====== */
