@@ -212,59 +212,46 @@ body{
 .card, .showcase, .marquee{ backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .card-img-top { height: 220px; object-fit: cover; }
 
-/* ====== PRODUCTO DETALLE — Galería ====== */
-.product-gallery{
-  max-width: 720px;                 /* ancho máximo de la tarjeta */
-  margin: 0 auto;                   /* centrada */
-  padding: 18px;                    /* espacio entre marco e imagen */
-  border-radius: 22px;              /* esquinas redondeadas del marco */
-  background: #050b1a;              /* color del marco */
-  box-shadow: 0 18px 40px rgba(0,0,0,.40);
-}
-
-.product-gallery .img-main{
+/* ====== PRODUCTO DETALLE — imagen principal ====== */
+.product-gallery .img-main,
+.img-main{
   width: 100%;
-  height: auto;
   max-height: 520px;
-  object-fit: contain;              /* no recorta la prenda */
+  height: auto;
+  object-fit: contain;
   display: block;
-  border-radius: 16px;              /* la imagen también se redondea */
-  background: transparent;          /* sin fondo extra raro */
+
+  /* 🔹 Lo importante: esquinas redondeadas */
+  border-radius: 22px;
 }
 
+/* Thumbnails (puedes dejarlas como ya las tenías) */
 .product-gallery-thumbs{
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: .5rem;
 }
-
 .product-gallery-thumbs .thumb{
   width: 72px;
   height: 72px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   opacity: .85;
   border: 2px solid transparent;
   background: #0e1530;
-  transition: opacity .15s ease,
-              border-color .15s ease,
-              box-shadow .15s ease,
-              transform .1s ease;
+  transition: opacity .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease;
 }
-
 .product-gallery-thumbs .thumb:hover,
 .product-gallery-thumbs .thumb.active{
   opacity: 1;
   border-color: var(--brand, #0d6efd);
   box-shadow: 0 0 0 2px rgba(13,110,253,.20);
 }
-
 .product-gallery-thumbs .thumb:active{
   transform: scale(.98);
 }
-
 
 /* Modal de zoom en tema oscuro */
 .modal-content.bg-dark{ background: #0b1020; }
