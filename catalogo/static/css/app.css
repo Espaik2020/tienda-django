@@ -214,23 +214,22 @@ body{
 
 /* ====== PRODUCTO DETALLE — imagen principal ====== */
 .product-gallery{
-  border-radius: 22px;      /* marco redondeado */
-  overflow: hidden;         /* recorta la imagen a ese borde */
-  background: #050b18;      /* fondo oscuro, igual en todos */
-  padding: 6px;             /* “marquito” delgado alrededor */
-  box-shadow: 0 18px 45px rgba(0,0,0,.45);
+  border-radius: 22px;   /* marco redondo */
+  overflow: hidden;      /* recorta la imagen a ese borde */
 }
 
-.product-gallery .img-main{
+/* La imagen ocupa el contenedor y también tiene el mismo radio */
+.product-gallery .img-main,
+.img-main{
   width: 100%;
   max-height: 520px;
   height: auto;
   object-fit: contain;
   display: block;
-  border-radius: inherit;   /* usa el mismo radio del contenedor */
+  border-radius: 22px;   /* por si alguna img no está dentro de .product-gallery */
 }
 
-/* Thumbnails (puedes dejarlas como ya las tenías) */
+/* ====== Thumbnails ====== */
 .product-gallery-thumbs{
   display: flex;
   flex-wrap: wrap;
@@ -246,7 +245,8 @@ body{
   opacity: .85;
   border: 2px solid transparent;
   background: #0e1530;
-  transition: opacity .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+  transition: opacity .15s ease, border-color .15s ease,
+              box-shadow .15s ease, transform .1s ease;
 }
 .product-gallery-thumbs .thumb:hover,
 .product-gallery-thumbs .thumb.active{
