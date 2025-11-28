@@ -216,11 +216,13 @@ body{
 .product-gallery .img-main{
   width: 100%;
   max-height: 520px;
+  height: auto;          /* opcional, pero ayuda */
   object-fit: contain;
-  background: #0b0f1f;
+  background: transparent;  /* o simplemente elimina esta línea */
   border-radius: 10px;
   display: block;
 }
+
 .product-gallery-thumbs{
   display: flex; flex-wrap: wrap; gap: 8px; margin-top: .5rem;
 }
