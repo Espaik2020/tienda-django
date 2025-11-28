@@ -214,19 +214,22 @@ body{
 
 /* ====== PRODUCTO DETALLE — Galería ====== */
 .product-gallery{
-  border-radius: 22px;          /* borde semi redondo como las otras cards */
-  overflow: hidden;             /* corta las esquinas de la imagen */
-  background: #050b1a;          /* fondo oscuro de la tarjeta */
-  box-shadow: 0 18px 40px rgba(0,0,0,.40); /* opcional, para que “flote” */
+  max-width: 720px;                 /* ancho máximo de la tarjeta */
+  margin: 0 auto;                   /* centrada */
+  padding: 18px;                    /* espacio entre marco e imagen */
+  border-radius: 22px;              /* esquinas redondeadas del marco */
+  background: #050b1a;              /* color del marco */
+  box-shadow: 0 18px 40px rgba(0,0,0,.40);
 }
 
 .product-gallery .img-main{
   width: 100%;
+  height: auto;
   max-height: 520px;
-  object-fit: contain;
+  object-fit: contain;              /* no recorta la prenda */
   display: block;
-  background: transparent;      /* sin fondo propio */
-  border-radius: 0;             /* importante: que NO redondee la imagen */
+  border-radius: 16px;              /* la imagen también se redondea */
+  background: transparent;          /* sin fondo extra raro */
 }
 
 .product-gallery-thumbs{
