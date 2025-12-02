@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     # --- Tus apps ---
     "catalogo",
     "accounts",
+    "auditoria",   
 ]
 
 # === Middleware ===
