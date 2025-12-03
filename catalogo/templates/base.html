@@ -327,8 +327,10 @@
 
     .mobile-bottom-nav{
       position: fixed;
-      left: 0; right: 0; bottom: 0;
-      z-index: 1050; /* por encima del contenido y del footer */
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1030; /* por encima del contenido y footer, PERO debajo del menú lateral */
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 4px;
@@ -417,6 +419,16 @@
     0 0 8px rgba(255, 235, 160, .9),
     0 0 18px rgba(255, 210, 100, .6);
 }
+
+/* --- Que el menú lateral quede por ENCIMA de la barra inferior --- */
+.offcanvas-backdrop{
+  z-index: 1200 !important;   /* fondo oscuro del menú */
+}
+
+.offcanvas{
+  z-index: 1210 !important;   /* panel del menú */
+}
+
 
   </style>
   <!-- Iconos: Bootstrap Icons -->
