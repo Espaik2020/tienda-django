@@ -97,26 +97,30 @@
         /* Desktop */
         .search-wrap{ width:100%; max-width:640px; }
 
-        /* Móvil: buscador centrado en la MISMA fila */
+        /* Móvil: header en 2 filas (arriba menú + logo + carrito, abajo buscador ancho completo) */
         @media (max-width: 991.98px){
-          /* grilla: [izq] [buscador] [der] */
           .header-row{
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            align-items: center;
-            gap: 10px;
-            min-height: 60px;
-            padding-block: 8px;
+            display:flex;
+            flex-wrap:wrap;
+            align-items:center;
+            gap:8px;
+            padding-block:8px;
           }
 
-          .header-left{ min-width: 0; }
-          .header-center{ display:block; min-width: 0; } /* aquí vive el buscador */
-          .header-right{ min-width: 0; }
+          .header-left,
+          .header-right{
+            flex:0 0 auto;
+          }
+
+          .header-center{
+            order:2;          /* el buscador se va a la fila de abajo */
+            flex:0 0 100%;
+          }
 
           .search-wrap{
-            display: block !important;
-            width: 100%;
-            max-width: none;
+            display:block !important;
+            width:100%;
+            max-width:none;
           }
         }
 
