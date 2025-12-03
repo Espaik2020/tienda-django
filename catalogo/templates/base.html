@@ -495,7 +495,11 @@
         {% if user.is_staff %}
           <a href="{% url 'admin:index' %}"
              class="btn btn-outline-warning d-none d-lg-inline-flex ms-2">
-            Panel admin
+            {% if user.profile.rol == "AUDITOR" %}
+              Panel auditor
+            {% else %}
+              Panel admin
+           {% endif %}
           </a>
         {% endif %}
 
@@ -782,7 +786,11 @@
             {% if user.is_staff %}
               <a class="btn w-100 btn-outline-warning menu-link"
                  href="{% url 'admin:index' %}">
-                Panel de administración
+                {% if user.profile.rol == "AUDITOR" %}
+                  Panel auditor
+                {% else %}
+                  Panel de administración
+                {% endif %}
               </a>
             {% endif %}
 
