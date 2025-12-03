@@ -78,9 +78,16 @@
     .brand-logo{ display:block; height:36px; width:auto; object-fit:contain; filter:drop-shadow(0 1px 6px rgba(0,0,0,.25)); }
     @media (min-width:1200px){ .brand-logo{ height:44px; } }
 
-    .nav-left{ display:none; }
-    @media (min-width:992px){ .nav-left{ display:flex; } }
-    .nav-left .nav-link{ padding:0 .25rem; }
+    /* Nav izquierda siempre visible (desktop y móvil) */
+    .nav-left{
+      display:flex;
+    }
+
+    /* Un poco más compacto para que quepa en móvil */
+    .nav-left .nav-link{
+      padding:0 .35rem;
+      font-size:0.9rem;
+    }
 
     /* Desktop */
     .search-wrap{ width:100%; max-width:640px; }
