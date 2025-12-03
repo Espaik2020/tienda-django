@@ -124,26 +124,6 @@
           }
         }
 
-      /* grilla: [izq] [buscador] [der] */
-      .header-row{
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        align-items: center;
-        gap: 10px;
-        min-height: 60px;
-        padding-block: 8px;
-      }
-
-      .header-left{ min-width: 0; }
-      .header-center{ display:block; min-width: 0; } /* aquí vive el buscador */
-      .header-right{ min-width: 0; }
-
-      .search-wrap{
-        display: block !important;  /* asegúrate de que NO se oculte en móvil */
-        width: 100%;
-        max-width: none;
-      }
-
 
     @media (max-width:1199.98px){ .hello-user{ display:none!important; } }
 
