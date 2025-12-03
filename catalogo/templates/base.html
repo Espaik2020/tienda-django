@@ -78,22 +78,48 @@
     .brand-logo{ display:block; height:36px; width:auto; object-fit:contain; filter:drop-shadow(0 1px 6px rgba(0,0,0,.25)); }
     @media (min-width:1200px){ .brand-logo{ height:44px; } }
 
-    /* Nav izquierda siempre visible (desktop y móvil) */
-    .nav-left{
-      display:flex;
-    }
+        /* Nav izquierda: SOLO desktop */
+        .nav-left{
+          display:none;        /* por defecto oculta (móvil) */
+        }
 
-    /* Un poco más compacto para que quepa en móvil */
-    .nav-left .nav-link{
-      padding:0 .35rem;
-      font-size:0.9rem;
-    }
+        @media (min-width: 992px){
+          .nav-left{
+            display:flex;      /* se muestra en desktop */
+          }
 
-    /* Desktop */
-    .search-wrap{ width:100%; max-width:640px; }
+          .nav-left .nav-link{
+            padding:0 .35rem;
+            font-size:0.9rem;
+          }
+        }
 
-    /* Móvil: buscador centrado en la MISMA fila */
-    @media (max-width: 991.98px){}
+        /* Desktop */
+        .search-wrap{ width:100%; max-width:640px; }
+
+        /* Móvil: buscador centrado en la MISMA fila */
+        @media (max-width: 991.98px){
+          /* grilla: [izq] [buscador] [der] */
+          .header-row{
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 10px;
+            min-height: 60px;
+            padding-block: 8px;
+          }
+
+          .header-left{ min-width: 0; }
+          .header-center{ display:block; min-width: 0; } /* aquí vive el buscador */
+          .header-right{ min-width: 0; }
+
+          .search-wrap{
+            display: block !important;
+            width: 100%;
+            max-width: none;
+          }
+        }
+
       /* grilla: [izq] [buscador] [der] */
       .header-row{
         display: grid;
