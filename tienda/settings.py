@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     "catalogo",
     "accounts",
     "auditoria",   
+    
+    "api",  
 ]
 
 # === Middleware ===

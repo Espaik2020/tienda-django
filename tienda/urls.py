@@ -12,6 +12,9 @@ from django.views.static import serve as static_serve
 urlpatterns = [
     path("admin/", admin.site.urls),
 
+    # API para App Inventor
+    path("api/", include("api.urls")),
+
     # Rutas de la tienda (home, productos, marcas, etc.)
     path("", include("catalogo.urls")),
 
