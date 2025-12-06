@@ -208,6 +208,14 @@ class NewsletterSubscriber(models.Model):
         verbose_name = "Suscriptor"
         verbose_name_plural = "Suscriptores"
 
+    def __str__(self):
+        return self.email
+
+    def ensure_token(self):
+        if not self.token:
+            self.token = secrets.token_urlsafe(32)
+
+
 # ========= PEDIDO (simulado) =========
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -217,7 +225,10 @@ class Order(models.Model):
     ]
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -233,14 +244,5 @@ class Order(models.Model):
         verbose_name_plural = "Pedidos"
 
     def __str__(self):
-        who = self.user.email if self.user else "anónimo"
-        return f"Order #{self.pk} - {who} - ${self.total}"
-    
-    
-
-    def __str__(self):
-        return self.email
-
-    def ensure_token(self):
-        if not self.token:
-            self.token = secrets.token_urlsafe(32)
+        who = self.user.email if (self.user and self.user.email) else "anónimo"
+        return f"Pedido #{self.pk} - {who} - ${self.total}"
