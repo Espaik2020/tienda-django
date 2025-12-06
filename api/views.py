@@ -40,6 +40,8 @@ def login_api(request):
         "email": user.email,
         "username": user.username,
         "nombre": getattr(profile, "nombre", "") or user.get_username(),
+        "is_staff": user.is_staff, 
+        "is_superuser": user.is_superuser,
     }
 
     return JsonResponse({"ok": True, "user": data_user})
