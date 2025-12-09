@@ -1,26 +1,148 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Crear cuenta{% endblock %}
+{% block title %}Crear cuenta · DNM Wear{% endblock %}
+
+{% block extra_css %}
+<style>
+  .auth-page{
+    min-height: calc(100vh - 140px);  /* ocupa casi toda la pantalla sin tapar el header/footer */
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .auth-card{
+    width:100%;
+    max-width:420px;
+    padding:1.75rem 1.5rem 1.5rem;
+    border-radius:20px;
+    background:
+      radial-gradient(120% 160% at 0 0,#1b2145 0,#0b1020 40%,#050712 100%);
+    box-shadow:0 18px 45px rgba(0,0,0,.6);
+    border:1px solid rgba(255,255,255,.08);
+  }
+
+  @media (min-width:576px){
+    .auth-card{
+      padding:2rem 2.25rem 2rem;
+      border-radius:24px;
+    }
+  }
+
+  .auth-title{
+    font-family:"Press Start 2P",system-ui;
+    font-size:0.95rem;
+    text-transform:uppercase;
+    letter-spacing:.15em;
+    color:#82f5c6;
+    margin-bottom:.75rem;
+  }
+
+  .auth-subtitle{
+    font-weight:700;
+    font-size:1.15rem;
+    color:#fff;
+    margin-bottom:.25rem;
+  }
+
+  .auth-muted{
+    font-size:.9rem;
+    color:#9fa8d0;
+  }
+
+  .auth-card label{
+    font-size:.85rem;
+    font-weight:600;
+    color:#d3ddff;
+  }
+
+  .auth-card input,
+  .auth-card select,
+  .auth-card textarea{
+    background:#050814;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.08);
+    color:#fff;
+  }
+
+  .auth-card input:focus,
+  .auth-card select:focus,
+  .auth-card textarea:focus{
+    border-color:#2ee6a8;
+    box-shadow:0 0 0 1px rgba(46,230,168,.35);
+    background:#050814;
+    color:#fff;
+  }
+
+  .auth-btn{
+    border-radius:999px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+  }
+
+  .auth-footer-link{
+    font-size:.9rem;
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width:560px">
-  <h1 class="h3 mb-3">Crear cuenta</h1>
+<div class="auth-page">
+  <div class="auth-card">
 
-  <form method="post" novalidate>
-    {% csrf_token %}
-    {% if form.non_field_errors %}
-      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
-    {% endif %}
+    <div class="mb-3 text-center">
+      <div class="auth-title">DNM WEAR</div>
+      <div class="auth-subtitle">Crear cuenta</div>
+      <p class="auth-muted mb-0">
+        Regístrate para guardar tus pedidos y tu wishlist gamer.
+      </p>
+    </div>
 
-    {# Render simple y compatible con UserCreationForm #}
-    {{ form.as_p }}
+    <form method="post" novalidate>
+      {% csrf_token %}
 
-    <button type="submit" class="btn btn-primary w-100">Registrarme</button>
-  </form>
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger small">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
 
-  <p class="mt-3 text-white-50">
-    ¿Ya tienes cuenta?
-    <a href="{% url 'login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">Inicia sesión</a>
-  </p>
+      {# Campos uno por uno, bonitos #}
+      {% for field in form %}
+        <div class="mb-3">
+          <label class="form-label" for="{{ field.id_for_label }}">
+            {{ field.label }}
+          </label>
+
+          {{ field }}
+
+          {% if field.help_text %}
+            <div class="form-text small text-muted">
+              {{ field.help_text|safe }}
+            </div>
+          {% endif %}
+
+          {% for error in field.errors %}
+            <div class="invalid-feedback d-block">
+              {{ error }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+      <button type="submit" class="btn btn-neon w-100 auth-btn mt-1">
+        Registrarme
+      </button>
+    </form>
+
+    <p class="mt-3 mb-0 text-center auth-footer-link text-white-50">
+      ¿Ya tienes cuenta?
+      <a href="{% url 'login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">
+        Inicia sesión
+      </a>
+    </p>
+  </div>
 </div>
 {% endblock %}
+
