@@ -5,10 +5,18 @@
 {% block extra_css %}
 <style>
   .auth-page{
-    min-height: calc(100vh - 140px);  /* ocupa casi toda la pantalla sin tapar el header/footer */
+    min-height: calc(100vh - 140px);
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:flex-start;
+    padding:1.5rem 1rem 2rem;   /* respirito arriba/abajo en móvil */
+  }
+
+  @media (min-width:576px){
+    .auth-page{
+      align-items:center;       /* en pantallas más grandes se centra vertical */
+      padding:2.5rem 0;
+    }
   }
 
   .auth-card{
@@ -35,12 +43,12 @@
     text-transform:uppercase;
     letter-spacing:.15em;
     color:#82f5c6;
-    margin-bottom:.75rem;
+    margin-bottom:.4rem;
   }
 
   .auth-subtitle{
     font-weight:700;
-    font-size:1.15rem;
+    font-size:1.2rem;
     color:#fff;
     margin-bottom:.25rem;
   }
@@ -54,15 +62,18 @@
     font-size:.85rem;
     font-weight:600;
     color:#d3ddff;
+    margin-bottom:.25rem;
   }
 
   .auth-card input,
   .auth-card select,
   .auth-card textarea{
+    width:100%;
     background:#050814;
     border-radius:12px;
     border:1px solid rgba(255,255,255,.08);
     color:#fff;
+    padding:.55rem .85rem;
   }
 
   .auth-card input:focus,
@@ -72,6 +83,20 @@
     box-shadow:0 0 0 1px rgba(46,230,168,.35);
     background:#050814;
     color:#fff;
+  }
+
+  /* Texto de ayuda (incluye los bullets de contraseña) */
+  .auth-card .form-text{
+    font-size:.78rem;
+    color:#9fa8d0;
+    margin-top:.25rem;
+  }
+  .auth-card .form-text ul{
+    padding-left:1.1rem;
+    margin-bottom:0;
+  }
+  .auth-card .form-text li{
+    margin-bottom:.15rem;
   }
 
   .auth-btn{
@@ -108,7 +133,7 @@
         </div>
       {% endif %}
 
-      {# Campos uno por uno, bonitos #}
+      {# Campos uno por uno #}
       {% for field in form %}
         <div class="mb-3">
           <label class="form-label" for="{{ field.id_for_label }}">
@@ -118,7 +143,7 @@
           {{ field }}
 
           {% if field.help_text %}
-            <div class="form-text small text-muted">
+            <div class="form-text">
               {{ field.help_text|safe }}
             </div>
           {% endif %}
