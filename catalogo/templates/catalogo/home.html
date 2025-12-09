@@ -106,9 +106,13 @@
         {% for _ in "12" %}
           {% for t in tematicas %}
             <a class="marquee-item text-decoration-none" href="{% url 'tematica_detalle' t.slug %}">
-              {% if t.icono %}
-                <img src="{{ t.icono.url }}" alt="{{ t.nombre }}" style="height:20px;width:20px;border-radius:50%;object-fit:cover;">
-              {% endif %}
+              {% with icon_url=t.icono_safe_url %}
+                {% if icon_url %}
+                  <img src="{{ icon_url }}" alt="{{ t.nombre }}"
+                       style="height:20px;width:20px;border-radius:50%;object-fit:cover;">
+                {% endif %}
+              {% endwith %}
+
               {{ t.nombre }}
             </a>
           {% endfor %}

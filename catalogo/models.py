@@ -67,6 +67,15 @@ class Tematica(models.Model):
 
     def get_absolute_url(self):
         return reverse("tematica_detalle", args=[self.slug])
+    
+    def icono_safe_url(self):
+        """Devuelve la URL del icono o None si no hay archivo físico."""
+        if not self.icono:
+            return None
+        try:
+            return self.icono.url
+        except (ValueError, FileNotFoundError):
+            return None
 
 
 # ========= CATEGORÍA =========

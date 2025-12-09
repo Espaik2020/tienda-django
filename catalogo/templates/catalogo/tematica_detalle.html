@@ -3,9 +3,13 @@
 
 {% block content %}
 <div class="d-flex align-items-center gap-3 mb-3">
-  {% if tematica.icono %}
-    <img src="{{ tematica.icono.url }}" alt="{{ tematica.nombre }}" style="height:42px; width:42px; border-radius:8px; object-fit:cover;">
-  {% endif %}
+  {% with icon_url=tematica.icono_safe_url %}
+    {% if icon_url %}
+      <img src="{{ icon_url }}" alt="{{ tematica.nombre }}"
+           style="height:42px; width:42px; border-radius:8px; object-fit:cover;">
+    {% endif %}
+  {% endwith %}
+
   <h1 class="m-0">{{ tematica.nombre }}</h1>
 </div>
 
